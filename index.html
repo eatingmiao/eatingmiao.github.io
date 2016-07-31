@@ -200,6 +200,128 @@
             
               
                 
+                <a class="post-title-link" href="/2016/07/31/ng plugin/" itemprop="url">
+                  Ionic HybridApp 定位与wifi插件
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-07-31T00:00:00+08:00" content="2016-07-31">
+              2016-07-31
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/31/ng plugin/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/31/ng plugin/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>ngCordova虽然提供了大部分HybridApp开发常用的插件，不过有些还是挺鸡肋的，比如定位插件$cordovaGeolocation，调试半天不是返回空就是连接超时，转而用HTML5的Geolocation调试才发现，原来用的是google的服务……毕竟在大天朝开发自带翻墙能力的app不太现实，于是转而求助github上的资源。</p>
+<p>最后我选用的定位插件是：</p>
+<ul>
+<li><a href="https://github.com/DoubleSpout/phonegap_baidu_sdk_location" target="_blank" rel="external">Phonegap Baidu Location Plugin</a></li>
+</ul>
+<p>wifi插件则是：</p>
+<ul>
+<li><a href="https://github.com/makeroo/WifiWizard" target="_blank" rel="external">WifiWizard</a></li>
+</ul>
+<p>定位插件暂时只提供了安卓的接口，调用的是百度的服务，所以不必担心在天朝的使用问题，wifi插件则是兼容了ios和安卓，我暂时不考虑ios开发，先做好安卓的功能性开发。<br>两者都挂在了window下，在github下载后执行ionic plugin install，可以直接调用：</p>
+<pre><code><span class="comment">//获取用户此时所在经纬度</span>
+$scope.getCurrentPosition = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+    <span class="built_in">document</span>.addEventListener(<span class="string">"deviceready"</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+        <span class="keyword">var</span> noop = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{};
+        <span class="built_in">window</span>.locationService.getCurrentPosition(<span class="function"><span class="keyword">function</span>(<span class="params">pos</span>) </span>{
+            $scope.nowPoint = {
+                lng: pos.coords.longitude,
+                lat: pos.coords.latitude
+            };
+            <span class="built_in">window</span>.locationService.stop(noop,noop);
+        }, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>{
+            toastr.error(e.message);
+            <span class="built_in">window</span>.locationService.stop(noop,noop);
+        });
+    }, <span class="literal">false</span>);
+};
+
+<span class="comment">//获取wifi列表</span>
+$scope.getWifiList = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+    <span class="built_in">document</span>.addEventListener(<span class="string">"deviceready"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+        <span class="built_in">window</span>.WifiWizard.listNetworks(<span class="function"><span class="keyword">function</span>(<span class="params">list</span>) </span>{
+            $scope.wifiList = list;
+        }, <span class="literal">false</span>);
+    }, <span class="literal">false</span>);
+}
+</code></pre>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/03/20/start now/" itemprop="url">
                   初心
                 </a>
@@ -784,7 +906,7 @@ angular.forEach(<span class="variable">$scope</span>.menuList,<span class="keywo
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -798,7 +920,7 @@ angular.forEach(<span class="variable">$scope</span>.menuList,<span class="keywo
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

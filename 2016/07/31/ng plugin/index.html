@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="AngularJs,JQuery," />
+  <meta name="keywords" content="AngularJs,Cordova,Ionic," />
 
 
 
@@ -51,34 +51,25 @@
 
 
 
-<meta name="description" content="做网站时最常遇到的问题之一，先说说jq的做法。在标签上绑定onerror事件：
-HTML:&amp;lt;img src=&quot;exist.png&quot; onerror=&quot;errorSrc(this) &quot;/&amp;gt; 
-再写个方法把加载失败的图片替换成404图片：
-JQ:function errorSrc(img){ 
-    $(img).attr(&quot;src&quot;, &quot;img/404.png&quot;);
-}
-就大功告成了！">
+<meta name="description" content="ngCordova虽然提供了大部分HybridApp开发常用的插件，不过有些还是挺鸡肋的，比如定位插件$cordovaGeolocation，调试半天不是返回空就是连接超时，转而用HTML5的Geolocation调试才发现，原来用的是google的服务……毕竟在大天朝开发自带翻墙能力的app不太现实，于是转而求助github上的资源。
+最后我选用的定位插件是：
+
+Phonegap Baidu L">
 <meta property="og:type" content="article">
-<meta property="og:title" content="图片的404处理">
-<meta property="og:url" content="http://eatingmiao.github.io/2016/03/16/src error/index.html">
+<meta property="og:title" content="Ionic HybridApp 定位与wifi插件">
+<meta property="og:url" content="http://eatingmiao.github.io/2016/07/31/ng plugin/index.html">
 <meta property="og:site_name" content="Eating's Notes">
-<meta property="og:description" content="做网站时最常遇到的问题之一，先说说jq的做法。在标签上绑定onerror事件：
-HTML:&amp;lt;img src=&quot;exist.png&quot; onerror=&quot;errorSrc(this) &quot;/&amp;gt; 
-再写个方法把加载失败的图片替换成404图片：
-JQ:function errorSrc(img){ 
-    $(img).attr(&quot;src&quot;, &quot;img/404.png&quot;);
-}
-就大功告成了！">
-<meta property="og:updated_time" content="2016-03-16T12:45:13.698Z">
+<meta property="og:description" content="ngCordova虽然提供了大部分HybridApp开发常用的插件，不过有些还是挺鸡肋的，比如定位插件$cordovaGeolocation，调试半天不是返回空就是连接超时，转而用HTML5的Geolocation调试才发现，原来用的是google的服务……毕竟在大天朝开发自带翻墙能力的app不太现实，于是转而求助github上的资源。
+最后我选用的定位插件是：
+
+Phonegap Baidu L">
+<meta property="og:updated_time" content="2016-07-31T14:58:44.396Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="图片的404处理">
-<meta name="twitter:description" content="做网站时最常遇到的问题之一，先说说jq的做法。在标签上绑定onerror事件：
-HTML:&amp;lt;img src=&quot;exist.png&quot; onerror=&quot;errorSrc(this) &quot;/&amp;gt; 
-再写个方法把加载失败的图片替换成404图片：
-JQ:function errorSrc(img){ 
-    $(img).attr(&quot;src&quot;, &quot;img/404.png&quot;);
-}
-就大功告成了！">
+<meta name="twitter:title" content="Ionic HybridApp 定位与wifi插件">
+<meta name="twitter:description" content="ngCordova虽然提供了大部分HybridApp开发常用的插件，不过有些还是挺鸡肋的，比如定位插件$cordovaGeolocation，调试半天不是返回空就是连接超时，转而用HTML5的Geolocation调试才发现，原来用的是google的服务……毕竟在大天朝开发自带翻墙能力的app不太现实，于是转而求助github上的资源。
+最后我选用的定位插件是：
+
+Phonegap Baidu L">
 
 
 
@@ -90,7 +81,7 @@ JQ:function errorSrc(img){
   };
 </script>
 
-  <title> 图片的404处理 | Eating's Notes </title>
+  <title> Ionic HybridApp 定位与wifi插件 | Eating's Notes </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -210,7 +201,7 @@ JQ:function errorSrc(img){
             
             
               
-                图片的404处理
+                Ionic HybridApp 定位与wifi插件
               
             
           </h1>
@@ -219,8 +210,8 @@ JQ:function errorSrc(img){
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-03-16T00:00:00+08:00" content="2016-03-16">
-              2016-03-16
+            <time itemprop="dateCreated" datetime="2016-07-31T00:00:00+08:00" content="2016-07-31">
+              2016-07-31
             </time>
           </span>
 
@@ -230,8 +221,8 @@ JQ:function errorSrc(img){
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/03/16/src error/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/16/src error/" itemprop="commentsCount"></span>
+                <a href="/2016/07/31/ng plugin/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/31/ng plugin/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -250,35 +241,42 @@ JQ:function errorSrc(img){
       
 
       
-        <span itemprop="articleBody"><p>做网站时最常遇到的问题之一，先说说jq的做法。<br>在标签上绑定onerror事件：</p>
-<h4 id="HTML:">HTML:</h4><pre><code>&lt;<span class="tag">img</span> src=<span class="string">"exist.png"</span> onerror=<span class="string">"errorSrc(this) "</span>/&gt; 
-</code></pre><p>再写个方法把加载失败的图片替换成404图片：</p>
-<h4 id="JQ:">JQ:</h4><pre><code><span class="function"><span class="keyword">function</span> <span class="title">errorSrc</span>(<span class="params">img</span>)</span>{ 
-    $(img).attr(<span class="string">"src"</span>, <span class="string">"img/404.png"</span>);
+        <span itemprop="articleBody"><p>ngCordova虽然提供了大部分HybridApp开发常用的插件，不过有些还是挺鸡肋的，比如定位插件$cordovaGeolocation，调试半天不是返回空就是连接超时，转而用HTML5的Geolocation调试才发现，原来用的是google的服务……毕竟在大天朝开发自带翻墙能力的app不太现实，于是转而求助github上的资源。</p>
+<p>最后我选用的定位插件是：</p>
+<ul>
+<li><a href="https://github.com/DoubleSpout/phonegap_baidu_sdk_location" target="_blank" rel="external">Phonegap Baidu Location Plugin</a></li>
+</ul>
+<p>wifi插件则是：</p>
+<ul>
+<li><a href="https://github.com/makeroo/WifiWizard" target="_blank" rel="external">WifiWizard</a></li>
+</ul>
+<p>定位插件暂时只提供了安卓的接口，调用的是百度的服务，所以不必担心在天朝的使用问题，wifi插件则是兼容了ios和安卓，我暂时不考虑ios开发，先做好安卓的功能性开发。<br>两者都挂在了window下，在github下载后执行ionic plugin install，可以直接调用：</p>
+<pre><code><span class="comment">//获取用户此时所在经纬度</span>
+$scope.getCurrentPosition = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+    <span class="built_in">document</span>.addEventListener(<span class="string">"deviceready"</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+        <span class="keyword">var</span> noop = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{};
+        <span class="built_in">window</span>.locationService.getCurrentPosition(<span class="function"><span class="keyword">function</span>(<span class="params">pos</span>) </span>{
+            $scope.nowPoint = {
+                lng: pos.coords.longitude,
+                lat: pos.coords.latitude
+            };
+            <span class="built_in">window</span>.locationService.stop(noop,noop);
+        }, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>{
+            toastr.error(e.message);
+            <span class="built_in">window</span>.locationService.stop(noop,noop);
+        });
+    }, <span class="literal">false</span>);
+};
+
+<span class="comment">//获取wifi列表</span>
+$scope.getWifiList = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+    <span class="built_in">document</span>.addEventListener(<span class="string">"deviceready"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+        <span class="built_in">window</span>.WifiWizard.listNetworks(<span class="function"><span class="keyword">function</span>(<span class="params">list</span>) </span>{
+            $scope.wifiList = list;
+        }, <span class="literal">false</span>);
+    }, <span class="literal">false</span>);
 }
-</code></pre><p>就大功告成了！但是要注意的是要把errorSrc放在html的head里提前加载，要不然网页载入时即使图片出错也可能还没读取到errorSrc处理函数。而且浏览器的控制窗其实还是会报get的错。</p>
-<p>如果在angular的框架下就更方便了，angular自带一个ngSrc指令，我们可以利用这个指令，自己写个angular指令，如下：</p>
-<h4 id="ngJS:">ngJS:</h4><pre><code>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
-<span class="pi">    'use strict'</span>;
-    <span class="comment">//加载指令</span>
-    angular.module(<span class="string">'app'</span>)
-        .directive(<span class="string">'errSrc'</span>, [
-            <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
-                <span class="keyword">return</span> {
-                    link: <span class="function"><span class="keyword">function</span>(<span class="params">scope, element, attrs</span>) </span>{
-                          element.bind(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
-                            <span class="keyword">if</span> (attrs.src != attrs.errSrc) {
-                                  attrs.$set(<span class="string">'src'</span>, attrs.errSrc);
-                            }
-                          });
-                    }
-                }
-            }
-        ])
-}());
-</code></pre><h4 id="ngHTML:">ngHTML:</h4><pre><code>&lt;<span class="tag">img</span> ng-src=<span class="string">""</span> err-src=<span class="string">"img/404.jpg"</span>/&gt;
-</code></pre><p>于是，angular在每次编译网页的时候，就会把已经不存在的图片换成了指定的img/404.jpg，而且这么浏览器控制窗也没有任何错误警告（强迫症福音www）。</p>
-</span>
+</code></pre></span>
       
     </div>
 
@@ -288,7 +286,9 @@ JQ:function errorSrc(img){
           
             <a href="/tags/AngularJs/" rel="tag">#AngularJs</a>
           
-            <a href="/tags/JQuery/" rel="tag">#JQuery</a>
+            <a href="/tags/Cordova/" rel="tag">#Cordova</a>
+          
+            <a href="/tags/Ionic/" rel="tag">#Ionic</a>
           
         </div>
       
@@ -297,17 +297,13 @@ JQ:function errorSrc(img){
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/02/12/ng bug/" rel="next" title="一个大坑">
-                <i class="fa fa-chevron-left"></i> 一个大坑
+              <a href="/2016/03/20/start now/" rel="next" title="初心">
+                <i class="fa fa-chevron-left"></i> 初心
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/03/20/start now/" rel="prev" title="初心">
-                初心 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -334,8 +330,8 @@ JQ:function errorSrc(img){
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/03/16/src error/"
-           data-title="图片的404处理" data-url="http://eatingmiao.github.io/2016/03/16/src error/">
+      <div class="ds-thread" data-thread-key="2016/07/31/ng plugin/"
+           data-title="Ionic HybridApp 定位与wifi插件" data-url="http://eatingmiao.github.io/2016/07/31/ng plugin/">
       </div>
     
   </div>
@@ -425,7 +421,7 @@ JQ:function errorSrc(img){
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTML:"><span class="nav-number">1.</span> <span class="nav-text">HTML:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JQ:"><span class="nav-number">2.</span> <span class="nav-text">JQ:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ngJS:"><span class="nav-number">3.</span> <span class="nav-text">ngJS:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ngHTML:"><span class="nav-number">4.</span> <span class="nav-text">ngHTML:</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
