@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="AngularJs,Cordova,Ionic," />
 
 
 
@@ -51,19 +51,28 @@
 
 
 
-<meta name="description" content="近几个月的上班时间我都闲着，稍微看了下react的入门文，对其中组件化的思想还蛮有兴趣，于是想试着把之前项目里自己写过的UI和JS组件化，然后才发现原来做一个小插件其实也要花不少时间，需要考虑到很多小细节，自己曾经写的逻辑其实存在着各种bug，才醒觉自己的知识储备和实践能力还远远不够！之前闲着的时间我都在干嘛了呢？以为自己已经掌握了不少才是一个严重的bug吧:(
-之前因为需要开导自己和安抚焦躁而看">
+<meta name="description" content="做了个手机端云盘，在选择和打开文件这里，又是个生僻的功能点……寻觅了众多插件，原本用的这个filechooser：
+
+Cordova Filechooser Plugin
+
+界面直接调用安卓手机系统的文件管理器，代码也十分简单，但经测试后发现，多媒体文件没取到实际路径和名称，这主要是因为安卓多媒体文件有特定的URI，以content开头（比如安卓4.4以下的系统版本的图片URI可以为content">
 <meta property="og:type" content="article">
-<meta property="og:title" content="初心">
-<meta property="og:url" content="http://eatingmiao.github.io/2016/03/20/start now/index.html">
+<meta property="og:title" content="Ionic HybridApp 选择与打开文件">
+<meta property="og:url" content="http://eatingmiao.github.io/2016/08/02/filechooser/index.html">
 <meta property="og:site_name" content="Eating's Notes">
-<meta property="og:description" content="近几个月的上班时间我都闲着，稍微看了下react的入门文，对其中组件化的思想还蛮有兴趣，于是想试着把之前项目里自己写过的UI和JS组件化，然后才发现原来做一个小插件其实也要花不少时间，需要考虑到很多小细节，自己曾经写的逻辑其实存在着各种bug，才醒觉自己的知识储备和实践能力还远远不够！之前闲着的时间我都在干嘛了呢？以为自己已经掌握了不少才是一个严重的bug吧:(
-之前因为需要开导自己和安抚焦躁而看">
-<meta property="og:updated_time" content="2016-03-21T07:32:36.000Z">
+<meta property="og:description" content="做了个手机端云盘，在选择和打开文件这里，又是个生僻的功能点……寻觅了众多插件，原本用的这个filechooser：
+
+Cordova Filechooser Plugin
+
+界面直接调用安卓手机系统的文件管理器，代码也十分简单，但经测试后发现，多媒体文件没取到实际路径和名称，这主要是因为安卓多媒体文件有特定的URI，以content开头（比如安卓4.4以下的系统版本的图片URI可以为content">
+<meta property="og:updated_time" content="2016-10-15T10:16:48.214Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="初心">
-<meta name="twitter:description" content="近几个月的上班时间我都闲着，稍微看了下react的入门文，对其中组件化的思想还蛮有兴趣，于是想试着把之前项目里自己写过的UI和JS组件化，然后才发现原来做一个小插件其实也要花不少时间，需要考虑到很多小细节，自己曾经写的逻辑其实存在着各种bug，才醒觉自己的知识储备和实践能力还远远不够！之前闲着的时间我都在干嘛了呢？以为自己已经掌握了不少才是一个严重的bug吧:(
-之前因为需要开导自己和安抚焦躁而看">
+<meta name="twitter:title" content="Ionic HybridApp 选择与打开文件">
+<meta name="twitter:description" content="做了个手机端云盘，在选择和打开文件这里，又是个生僻的功能点……寻觅了众多插件，原本用的这个filechooser：
+
+Cordova Filechooser Plugin
+
+界面直接调用安卓手机系统的文件管理器，代码也十分简单，但经测试后发现，多媒体文件没取到实际路径和名称，这主要是因为安卓多媒体文件有特定的URI，以content开头（比如安卓4.4以下的系统版本的图片URI可以为content">
 
 
 
@@ -75,7 +84,7 @@
   };
 </script>
 
-  <title> 初心 | Eating's Notes </title>
+  <title> Ionic HybridApp 选择与打开文件 | Eating's Notes </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -195,7 +204,7 @@
             
             
               
-                初心
+                Ionic HybridApp 选择与打开文件
               
             
           </h1>
@@ -204,8 +213,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-03-20T00:00:00+08:00" content="2016-03-20">
-              2016-03-20
+            <time itemprop="dateCreated" datetime="2016-08-02T00:00:00+08:00" content="2016-08-02">
+              2016-08-02
             </time>
           </span>
 
@@ -215,8 +224,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/03/20/start now/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/20/start now/" itemprop="commentsCount"></span>
+                <a href="/2016/08/02/filechooser/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/02/filechooser/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -235,32 +244,82 @@
       
 
       
-        <span itemprop="articleBody"><p>近几个月的上班时间我都闲着，稍微看了下react的入门文，对其中组件化的思想还蛮有兴趣，于是想试着把之前项目里自己写过的UI和JS组件化，然后才发现原来做一个小插件其实也要花不少时间，需要考虑到很多小细节，自己曾经写的逻辑其实存在着各种bug，才醒觉自己的知识储备和实践能力还远远不够！之前闲着的时间我都在干嘛了呢？以为自己已经掌握了不少才是一个严重的bug吧:(</p>
-<p>之前因为需要开导自己和安抚焦躁而看了不少关于正念的书，《不分心：初学者的正念书》里写到需要的七种态度，其中一种就是“初学者之心”。现在自己的力不从心，也是当初学习的时候没有把这颗“初学者之心”挂在心上吧？回头看自己的膨胀的自信和固执，也是有点可笑。不过现在我后悔和自责的思绪，其实也是不值得的吧，“大多数抱怨自己太忙的人，其实是被思考和妄想占据了时间。对过去或未来的思考，占用了大量的时间和精力，以至于没有余力来关心现在”，我想更重要的是随时开始，与其花时间去想过去自己走得有多糟糕，未来的第一步怎么优雅地走，还不如现在就动手做。</p>
-<blockquote>
-<p>“成功就是起点，失败就是经验，过程就是结果，现在就是全部。”——圣严法师</p>
-</blockquote>
+        <span itemprop="articleBody"><p>做了个手机端云盘，在选择和打开文件这里，又是个生僻的功能点……<br>寻觅了众多插件，原本用的这个filechooser：</p>
+<ul>
+<li><a href="https://github.com/don/cordova-filechooser" target="_blank" rel="external">Cordova Filechooser Plugin</a></li>
+</ul>
+<p>界面直接调用安卓手机系统的文件管理器，代码也十分简单，但经测试后发现，多媒体文件没取到实际路径和名称，这主要是因为安卓多媒体文件有特定的URI，以content开头（比如安卓4.4以下的系统版本的图片URI可以为content://media/extenral/images/media/18726，但4.4以后的版本又有所不同），将会交给安卓的内容提供器（如MediaStore）使用。这种多媒体名称格式也没法从中知道具体的文件类型，这样的话，在做打开文件的功能点时，就缺少一个文件类型的参数。<br>所以换成了这个文件选择插件：</p>
+<ul>
+<li><a href="https://github.com/MaginSoft/MFileChooser" target="_blank" rel="external">MaginSoft MFilechooser Plugin</a></li>
+</ul>
+<p>这个插件自带了一个界面，以后可以根据自己APP的需要改下UI风格，路径和名称都能按实际返回。<br>选择文件后，用cordovaFileTransfer上传到服务端，查看文件时，第一次打开需要下载到本地，然后用cordovaFileOpener2选择程序打开相应的文件，具体代码如下：</p>
+<pre><code><span class="comment">// 文件需下载到本地打开</span>
+document.addEventListener(<span class="string">"deviceready"</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>{
+<span class="comment">// 保存路径</span>
+<span class="keyword">var</span> path = cordova.file.externalApplicationStorageDirectory; 
+<span class="comment">// 打开文件</span>
+<span class="function"><span class="keyword">function</span> <span class="title">openFile</span><span class="params">()</span> </span>{
+    <span class="keyword">var</span> MIMEtype = <span class="variable">$scope</span>.getFileType(item.fileName.substr(item.fileName.lastIndexOf(<span class="string">'.'</span>)+<span class="number">1</span>));
+    <span class="keyword">if</span> (MIMEtype) {
+        <span class="variable">$cordovaFileOpener2</span>.open(
+            path + item.fileName,
+            MIMEtype
+        ).then(<span class="keyword">true</span>, <span class="function"><span class="keyword">function</span><span class="params">(err)</span> </span>{
+            toastr.error(err.message);
+        });
+    } <span class="keyword">else</span> {
+        toastr.error(<span class="string">"无法匹配打开此文件的本地程序"</span>);
+    }
+};
+<span class="comment">// 检查本地是否已下载文件</span>
+<span class="variable">$cordovaFile</span>.checkFile(path, item.fileName)
+    .then(<span class="function"><span class="keyword">function</span> <span class="params">(success)</span> </span>{
+        openFile();
+    }, <span class="function"><span class="keyword">function</span> <span class="params">(error)</span> </span>{
+        <span class="comment">// 下载地址</span>
+        <span class="keyword">var</span> uri = Constants.server + item.fileUrl;
+        <span class="comment">// 下载文件</span>
+        <span class="variable">$cordovaFileTransfer</span>.download(uri, path + item.fileName, {}, <span class="keyword">true</span>)
+            .then(<span class="function"><span class="keyword">function</span> <span class="params">(result)</span> </span>{
+                toastr.success(<span class="string">"下载成功"</span>);
+                openFile();
+            }, <span class="function"><span class="keyword">function</span> <span class="params">(err)</span> </span>{
+                toastr.error(<span class="string">"下载失败，请重试"</span>);
+        });
+    });
+}, <span class="keyword">false</span>);
+</code></pre><p>这里原本想用FileSystem API来进行文件的缓存的，结果打开文件时会返回NOT FOUND，查看了文件夹的确是下载成功了，想想应该是因为没有权限读取吧。</p>
 </span>
       
     </div>
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/AngularJs/" rel="tag">#AngularJs</a>
+          
+            <a href="/tags/Cordova/" rel="tag">#Cordova</a>
+          
+            <a href="/tags/Ionic/" rel="tag">#Ionic</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/16/src error/" rel="next" title="图片的404处理">
-                <i class="fa fa-chevron-left"></i> 图片的404处理
+              <a href="/2016/07/31/ng plugin/" rel="next" title="Ionic HybridApp 定位与wifi插件">
+                <i class="fa fa-chevron-left"></i> Ionic HybridApp 定位与wifi插件
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/07/31/ng plugin/" rel="prev" title="Ionic HybridApp 定位与wifi插件">
-                Ionic HybridApp 定位与wifi插件 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/09/10/=&copy/" rel="prev" title="“=”赋值和angular.copy()赋值的区别">
+                “=”赋值和angular.copy()赋值的区别 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -288,8 +347,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/03/20/start now/"
-           data-title="初心" data-url="http://eatingmiao.github.io/2016/03/20/start now/">
+      <div class="ds-thread" data-thread-key="2016/08/02/filechooser/"
+           data-title="Ionic HybridApp 选择与打开文件" data-url="http://eatingmiao.github.io/2016/08/02/filechooser/">
       </div>
     
   </div>
@@ -333,7 +392,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

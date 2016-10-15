@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="AngularJs," />
+  <meta name="keywords" content="AngularJs,Ionic," />
 
 
 
@@ -51,16 +51,20 @@
 
 
 
-<meta name="description" content="关于ng路由的各种使用情况，要是认真写起来就一匹布那么长了。虽然项目容积一大起来感觉路由就容易乱，但如果能灵活运用路由的各种机制还是蛮方便的。比如说，跳转页面时，两个页面的controller之间传输数据，如果只是传个参数id什么的，就没必要调用另一个函数来进行传输啦，用route自带的机制来传id也是蛮方便的。只要在页面的data-ui-sref跳转state中加上参数，然后在$statePro">
+<meta name="description" content="一直忽略了编程语言的“=”赋值其实跟数学的赋值有所区别，刚开始在做以下这个案例时，弹出插件的控制器传送的数据变量直接用了“=”来赋值，导致即使点击了插件的“取消”按钮，另一个控制器的数据也直接更新了，在此不需要即时更新，用户完成选择的时候才需要更新数据，这样的话用“=”就会形成一个即时更新的通道，所以应该用angular的copy来赋值才对。
+还是以此场景为案例，详细来说说这两个赋值的区别：内存里">
 <meta property="og:type" content="article">
-<meta property="og:title" content="$stateParams">
-<meta property="og:url" content="http://eatingmiao.github.io/2016/01/17/$stateParams/index.html">
+<meta property="og:title" content="“=”赋值和angular.copy()赋值的区别">
+<meta property="og:url" content="http://eatingmiao.github.io/2016/09/10/=&copy/index.html">
 <meta property="og:site_name" content="Eating's Notes">
-<meta property="og:description" content="关于ng路由的各种使用情况，要是认真写起来就一匹布那么长了。虽然项目容积一大起来感觉路由就容易乱，但如果能灵活运用路由的各种机制还是蛮方便的。比如说，跳转页面时，两个页面的controller之间传输数据，如果只是传个参数id什么的，就没必要调用另一个函数来进行传输啦，用route自带的机制来传id也是蛮方便的。只要在页面的data-ui-sref跳转state中加上参数，然后在$statePro">
-<meta property="og:updated_time" content="2016-06-26T00:27:05.414Z">
+<meta property="og:description" content="一直忽略了编程语言的“=”赋值其实跟数学的赋值有所区别，刚开始在做以下这个案例时，弹出插件的控制器传送的数据变量直接用了“=”来赋值，导致即使点击了插件的“取消”按钮，另一个控制器的数据也直接更新了，在此不需要即时更新，用户完成选择的时候才需要更新数据，这样的话用“=”就会形成一个即时更新的通道，所以应该用angular的copy来赋值才对。
+还是以此场景为案例，详细来说说这两个赋值的区别：内存里">
+<meta property="og:image" content="http://7xowup.com1.z0.glb.clouddn.com/=&copy.gif">
+<meta property="og:updated_time" content="2016-10-15T10:16:28.494Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="$stateParams">
-<meta name="twitter:description" content="关于ng路由的各种使用情况，要是认真写起来就一匹布那么长了。虽然项目容积一大起来感觉路由就容易乱，但如果能灵活运用路由的各种机制还是蛮方便的。比如说，跳转页面时，两个页面的controller之间传输数据，如果只是传个参数id什么的，就没必要调用另一个函数来进行传输啦，用route自带的机制来传id也是蛮方便的。只要在页面的data-ui-sref跳转state中加上参数，然后在$statePro">
+<meta name="twitter:title" content="“=”赋值和angular.copy()赋值的区别">
+<meta name="twitter:description" content="一直忽略了编程语言的“=”赋值其实跟数学的赋值有所区别，刚开始在做以下这个案例时，弹出插件的控制器传送的数据变量直接用了“=”来赋值，导致即使点击了插件的“取消”按钮，另一个控制器的数据也直接更新了，在此不需要即时更新，用户完成选择的时候才需要更新数据，这样的话用“=”就会形成一个即时更新的通道，所以应该用angular的copy来赋值才对。
+还是以此场景为案例，详细来说说这两个赋值的区别：内存里">
 
 
 
@@ -72,7 +76,7 @@
   };
 </script>
 
-  <title> $stateParams | Eating's Notes </title>
+  <title> “=”赋值和angular.copy()赋值的区别 | Eating's Notes </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -192,7 +196,7 @@
             
             
               
-                $stateParams
+                “=”赋值和angular.copy()赋值的区别
               
             
           </h1>
@@ -201,8 +205,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-01-17T00:00:00+08:00" content="2016-01-17">
-              2016-01-17
+            <time itemprop="dateCreated" datetime="2016-09-10T00:00:00+08:00" content="2016-09-10">
+              2016-09-10
             </time>
           </span>
 
@@ -212,8 +216,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/17/$stateParams/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/17/$stateParams/" itemprop="commentsCount"></span>
+                <a href="/2016/09/10/=&copy/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/10/=&copy/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -232,23 +236,8 @@
       
 
       
-        <span itemprop="articleBody"><p>关于ng路由的各种使用情况，要是认真写起来就一匹布那么长了。虽然项目容积一大起来感觉路由就容易乱，但如果能灵活运用路由的各种机制还是蛮方便的。<br>比如说，跳转页面时，两个页面的controller之间传输数据，如果只是传个参数id什么的，就没必要调用另一个函数来进行传输啦，用route自带的机制来传id也是蛮方便的。<br>只要在页面的data-ui-sref跳转state中加上参数，然后在$stateProvider声明state的url时加上参数名，那么在controller中就可以调用$stateParams来获取需要的参数了。</p>
-<h4 id="HTML:">HTML:</h4><pre><code>&lt;<span class="keyword">button </span><span class="preprocessor">data</span>-ui-sref=<span class="string">"order.comment({orderId:detail.orderId,goodsId:detail.goodsId})"</span>&gt;订单&lt;/<span class="keyword">button&gt;</span>
-</code></pre><h4 id="JS:">JS:</h4><pre><code>.state(<span class="string">'order.comment'</span>, {
-    js:
-    url: <span class="string">'/comment?orderId&amp;goodsId'</span>,
-    cache:false,
-    views: {
-        <span class="string">'content@'</span>: {
-            templateUrl: <span class="string">'module/mine/views/my-order/order-comment.html'</span>,
-            controller: <span class="string">'orderCommentController'</span>
-        }
-    }
-})
-</code></pre><p>后来在stackoverflow上面看到一个问题也是值得注意的：</p>
-<p>What is the difference between: $routeParams and $stateParams？</p>
-<p>有一个回答这么说道：<br>Both are from different router modules. You can use anyone in your application.<br>If you use ngRoute module, then you should use <a href="https://docs.angularjs.org/api/ngRoute" target="_blank" rel="external">$routeParams</a> . This is provided by Angular team. It has only one ng-view. you can not do nested views functionality.<br>If you use ui-router module, then you should use <a href="ttps://github.com/angular-ui/ui-router" target="_blank" rel="external">$stateParams</a>. This is from contributed module. It has number of additional functionality compare than ngRoute . It supports nested view concepts. you can specify multiple ui-view</p>
-<p>See more: <a href="http://www.amasik.com/angularjs-ngroute-vs-ui-router/" target="_blank" rel="external">http://www.amasik.com/angularjs-ngroute-vs-ui-router/</a></p>
+        <span itemprop="articleBody"><p>一直忽略了编程语言的“=”赋值其实跟数学的赋值有所区别，刚开始在做以下这个案例时，<br><img src="http://7xowup.com1.z0.glb.clouddn.com/=&amp;copy.gif" alt="choose-member"><br>弹出插件的控制器传送的数据变量直接用了“=”来赋值，导致即使点击了插件的“取消”按钮，另一个控制器的数据也直接更新了，在此不需要即时更新，用户完成选择的时候才需要更新数据，这样的话用“=”就会形成一个即时更新的通道，所以应该用angular的copy来赋值才对。</p>
+<p>还是以此场景为案例，详细来说说这两个赋值的区别：<br>内存里有一段地址储存了{name: “During”}这个数据，页面控制器的成员数据$scope.member指向了它，插件的控制器中的选择数据$scope.select也指向了它，当这两个控制器的数据通过angular的factory取出数据并使$scope.member = $scope.select的时候，事实上是让二者同时指向了该数据，因此一个变了另外一个也会跟着变。<br>如果用$scope.member = angular.copy($scope.select)，那就是先做了一份select数据的拷贝，也就是内存中多了另外一份数据，值相同但地址不同，然后让$scope.member指向了这份拷贝，所以二者指向了不同的内存地址，就不会相互影响了。</p>
 </span>
       
     </div>
@@ -259,6 +248,8 @@
           
             <a href="/tags/AngularJs/" rel="tag">#AngularJs</a>
           
+            <a href="/tags/Ionic/" rel="tag">#Ionic</a>
+          
         </div>
       
 
@@ -266,17 +257,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/12/04/angularjs without jq/" rel="next" title="AngularJs without JQ">
-                <i class="fa fa-chevron-left"></i> AngularJs without JQ
+              <a href="/2016/08/02/filechooser/" rel="next" title="Ionic HybridApp 选择与打开文件">
+                <i class="fa fa-chevron-left"></i> Ionic HybridApp 选择与打开文件
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/02/12/ng bug/" rel="prev" title="一个大坑">
-                一个大坑 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -303,8 +290,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/17/$stateParams/"
-           data-title="$stateParams" data-url="http://eatingmiao.github.io/2016/01/17/$stateParams/">
+      <div class="ds-thread" data-thread-key="2016/09/10/=&copy/"
+           data-title="“=”赋值和angular.copy()赋值的区别" data-url="http://eatingmiao.github.io/2016/09/10/=&copy/">
       </div>
     
   </div>
@@ -394,7 +381,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTML:"><span class="nav-number">1.</span> <span class="nav-text">HTML:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JS:"><span class="nav-number">2.</span> <span class="nav-text">JS:</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
