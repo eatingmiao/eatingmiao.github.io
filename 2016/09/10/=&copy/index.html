@@ -51,20 +51,20 @@
 
 
 
-<meta name="description" content="一直忽略了编程语言的“=”赋值其实跟数学的赋值有所区别，刚开始在做以下这个案例时，弹出插件的控制器传送的数据变量直接用了“=”来赋值，导致即使点击了插件的“取消”按钮，另一个控制器的数据也直接更新了，在此不需要即时更新，用户完成选择的时候才需要更新数据，这样的话用“=”就会形成一个即时更新的通道，所以应该用angular的copy来赋值才对。
-还是以此场景为案例，详细来说说这两个赋值的区别：内存里">
+<meta name="description" content="刚开始在做以下这个案例时，弹出插件的控制器传送的数据变量直接用了“=”来赋值，导致即使点击了插件的“取消”按钮，另一个控制器的数据也直接更新了，在此不需要即时更新，用户完成选择的时候才需要更新数据，这样的话用“=”就会形成一个即时更新的通道，所以应该用angular的copy来赋值才对。
+还是以此场景为案例，详细来说说这两个赋值的区别：内存里有一段地址储存了{name: “During”}这个数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="“=”赋值和angular.copy()赋值的区别">
 <meta property="og:url" content="http://eatingmiao.github.io/2016/09/10/=&copy/index.html">
 <meta property="og:site_name" content="Eating's Notes">
-<meta property="og:description" content="一直忽略了编程语言的“=”赋值其实跟数学的赋值有所区别，刚开始在做以下这个案例时，弹出插件的控制器传送的数据变量直接用了“=”来赋值，导致即使点击了插件的“取消”按钮，另一个控制器的数据也直接更新了，在此不需要即时更新，用户完成选择的时候才需要更新数据，这样的话用“=”就会形成一个即时更新的通道，所以应该用angular的copy来赋值才对。
-还是以此场景为案例，详细来说说这两个赋值的区别：内存里">
+<meta property="og:description" content="刚开始在做以下这个案例时，弹出插件的控制器传送的数据变量直接用了“=”来赋值，导致即使点击了插件的“取消”按钮，另一个控制器的数据也直接更新了，在此不需要即时更新，用户完成选择的时候才需要更新数据，这样的话用“=”就会形成一个即时更新的通道，所以应该用angular的copy来赋值才对。
+还是以此场景为案例，详细来说说这两个赋值的区别：内存里有一段地址储存了{name: “During”}这个数据">
 <meta property="og:image" content="http://7xowup.com1.z0.glb.clouddn.com/=&copy.gif">
-<meta property="og:updated_time" content="2016-10-15T10:16:28.494Z">
+<meta property="og:updated_time" content="2016-11-02T13:31:28.014Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="“=”赋值和angular.copy()赋值的区别">
-<meta name="twitter:description" content="一直忽略了编程语言的“=”赋值其实跟数学的赋值有所区别，刚开始在做以下这个案例时，弹出插件的控制器传送的数据变量直接用了“=”来赋值，导致即使点击了插件的“取消”按钮，另一个控制器的数据也直接更新了，在此不需要即时更新，用户完成选择的时候才需要更新数据，这样的话用“=”就会形成一个即时更新的通道，所以应该用angular的copy来赋值才对。
-还是以此场景为案例，详细来说说这两个赋值的区别：内存里">
+<meta name="twitter:description" content="刚开始在做以下这个案例时，弹出插件的控制器传送的数据变量直接用了“=”来赋值，导致即使点击了插件的“取消”按钮，另一个控制器的数据也直接更新了，在此不需要即时更新，用户完成选择的时候才需要更新数据，这样的话用“=”就会形成一个即时更新的通道，所以应该用angular的copy来赋值才对。
+还是以此场景为案例，详细来说说这两个赋值的区别：内存里有一段地址储存了{name: “During”}这个数据">
 
 
 
@@ -236,7 +236,7 @@
       
 
       
-        <span itemprop="articleBody"><p>一直忽略了编程语言的“=”赋值其实跟数学的赋值有所区别，刚开始在做以下这个案例时，<br><img src="http://7xowup.com1.z0.glb.clouddn.com/=&amp;copy.gif" alt="choose-member"><br>弹出插件的控制器传送的数据变量直接用了“=”来赋值，导致即使点击了插件的“取消”按钮，另一个控制器的数据也直接更新了，在此不需要即时更新，用户完成选择的时候才需要更新数据，这样的话用“=”就会形成一个即时更新的通道，所以应该用angular的copy来赋值才对。</p>
+        <span itemprop="articleBody"><p>刚开始在做以下这个案例时，<br><img src="http://7xowup.com1.z0.glb.clouddn.com/=&amp;copy.gif" alt="choose-member"><br>弹出插件的控制器传送的数据变量直接用了“=”来赋值，导致即使点击了插件的“取消”按钮，另一个控制器的数据也直接更新了，在此不需要即时更新，用户完成选择的时候才需要更新数据，这样的话用“=”就会形成一个即时更新的通道，所以应该用angular的copy来赋值才对。</p>
 <p>还是以此场景为案例，详细来说说这两个赋值的区别：<br>内存里有一段地址储存了{name: “During”}这个数据，页面控制器的成员数据$scope.member指向了它，插件的控制器中的选择数据$scope.select也指向了它，当这两个控制器的数据通过angular的factory取出数据并使$scope.member = $scope.select的时候，事实上是让二者同时指向了该数据，因此一个变了另外一个也会跟着变。<br>如果用$scope.member = angular.copy($scope.select)，那就是先做了一份select数据的拷贝，也就是内存中多了另外一份数据，值相同但地址不同，然后让$scope.member指向了这份拷贝，所以二者指向了不同的内存地址，就不会相互影响了。</p>
 </span>
       
@@ -264,6 +264,10 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/01/type/" rel="prev" title="JavaScript类型">
+                JavaScript类型 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -335,7 +339,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -349,7 +353,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
