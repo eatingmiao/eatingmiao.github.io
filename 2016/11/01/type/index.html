@@ -73,7 +73,7 @@ JavaScript虽然没有类，但仍存在两种类型：
 其他编程语言用栈储存原始类型，用堆储存引用类型，js则用一个变量对象追踪变流量的生存期，原始值被保存在变量对象内，而引用值则作为一个指针保存在变量对象内，该指针指向实际对象在内存中的存储位置。
 原始类型
 bool">
-<meta property="og:updated_time" content="2016-11-02T13:36:08.160Z">
+<meta property="og:updated_time" content="2016-11-02T13:39:51.854Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScript类型">
 <meta name="twitter:description" content="上一篇笔记提到了赋值和复制的微妙区别，现在来整理一下理论。
@@ -271,8 +271,7 @@ bool">
 <li>undefined</li>
 </ul>
 <p>原始类型的变量值直接保存原始值，当原始值赋给一个变量时，每个变量有自己的一份数据拷贝。</p>
-<h4 id="引用类型">引用类型</h4><p>引用值是引用类型的实例，就是对象，对象是属性的无序列表，js里的函数其实也是引用值。</p>
-<p>引用类型不在变量中直接保存对象，所以引用值变量实际上并不包含对象的实例，而是一个指向了内存中实际对象所在位置的指针。</p>
+<h4 id="引用类型">引用类型</h4><p>引用值是引用类型的实例，就是对象，对象是属性的无序列表，js里的函数其实也是引用值。<br>引用类型不在变量中直接保存对象，所以引用值变量实际上并不包含对象的实例，而是一个指向了内存中实际对象所在位置的指针。</p>
 <p>js有垃圾回收机制，使用引用类型时虽然不必担心内存非配，但最好在对象使用完毕后解除引用，让垃圾收集器对其内存进行释放，最佳解除手段是将对象置为null。</p>
 </span>
       
@@ -298,6 +297,10 @@ bool">
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/17/tree/" rel="prev" title="无限树节点">
+                无限树节点 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -369,7 +372,7 @@ bool">
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -436,7 +439,7 @@ bool">
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>

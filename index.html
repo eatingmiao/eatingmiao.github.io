@@ -200,6 +200,119 @@
             
               
                 
+                <a class="post-title-link" href="/2016/12/17/tree/" itemprop="url">
+                  无限树节点
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-12-17T00:00:00+08:00" content="2016-12-17">
+              2016-12-17
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/17/tree/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/17/tree/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>之前有在已知树节点的情况下做过两级树菜单，如果是未知树节点的情况下，有可能是无限节点的延伸，这时可以用ng的inclue功能来实现，html结构大概如下：</p>
+<h4 id="HTML:">HTML:</h4><pre><code><span class="tag">&lt;<span class="title">ul</span> <span class="attribute">class</span>=<span class="value">"list-unstyled"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"organ in $ctrl.organsList"</span> <span class="attribute">ng-click</span>=<span class="value">"$ctrl.selectOrgan(organ,'parent',$event)"</span>&gt;</span>
+        <span class="comment"></span>
+        <span class="tag">&lt;<span class="title">ul</span> <span class="attribute">ng-include</span>=<span class="value">"'organ-children.html'"</span>&gt;</span><span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/ng-template"</span> <span class="attribute">id</span>=<span class="value">"organ-children.html"</span>&gt;</span><span class="handlebars"><span class="xml">
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"organ in organ.children"</span> <span class="attribute">ng-click</span>=<span class="value">"$ctrl.selectOrgan(organ,'child',$event)"</span>&gt;</span>
+        <span class="comment"></span>
+        <span class="tag">&lt;<span class="title">ul</span> <span class="attribute">ng-if</span>=<span class="value">"organ.hadChildren=='C02'"</span> <span class="attribute">ng-include</span>=<span class="value">"'organ-children.html'"</span>&gt;</span><span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+</span></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</code></pre><p>在子页面children.html的列表li也包着子页面本身，于是就像迭代自己一样可以形成未知的多级菜单。<br>如果一开始不是一次性获得整棵树，点击父节点才能获取子节点的话，还得注意使用阻止冒泡的方法来阻止父节点的事件。<br>ng的$event事件里就带有阻止冒泡方法stopPropagation()，点击节点的方法如下：</p>
+<h4 id="JS:">JS:</h4><pre><code><span class="variable">$ctrl</span>.selectOrgan = <span class="keyword">function</span>(<span class="literal">item</span>,name,<span class="variable">$e</span>) {
+    <span class="variable">$ctrl</span>.selected = item;
+    if (!!name) {
+        if (name == <span class="string">'child'</span>) {
+            // 阻止冒泡
+            <span class="variable">$e</span>.stopPropagation();
+        }
+        if (item.hadChildren == <span class="string">'C02'</span> &amp;&amp; !item.hasOwnProperty(<span class="string">'children'</span>)) {
+            <span class="variable">$ctrl</span>.getData(item);
+        }
+    }
+};
+</code></pre>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/11/01/type/" itemprop="url">
                   JavaScript类型
                 </a>
@@ -260,8 +373,7 @@
 <li>undefined</li>
 </ul>
 <p>原始类型的变量值直接保存原始值，当原始值赋给一个变量时，每个变量有自己的一份数据拷贝。</p>
-<h4 id="引用类型">引用类型</h4><p>引用值是引用类型的实例，就是对象，对象是属性的无序列表，js里的函数其实也是引用值。</p>
-<p>引用类型不在变量中直接保存对象，所以引用值变量实际上并不包含对象的实例，而是一个指向了内存中实际对象所在位置的指针。</p>
+<h4 id="引用类型">引用类型</h4><p>引用值是引用类型的实例，就是对象，对象是属性的无序列表，js里的函数其实也是引用值。<br>引用类型不在变量中直接保存对象，所以引用值变量实际上并不包含对象的实例，而是一个指向了内存中实际对象所在位置的指针。</p>
 <p>js有垃圾回收机制，使用引用类型时虽然不必担心内存非配，但最好在对象使用完毕后解除引用，让垃圾收集器对其内存进行释放，最佳解除手段是将对象置为null。</p>
 
             
@@ -1140,7 +1252,7 @@ angular.forEach(<span class="variable">$scope</span>.menuList,<span class="keywo
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1190,7 +1302,7 @@ angular.forEach(<span class="variable">$scope</span>.menuList,<span class="keywo
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>
