@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="AngularJs," />
+  <meta name="keywords" content="AngularJs,Ionic,RxJs," />
 
 
 
@@ -51,22 +51,31 @@
 
 
 
-<meta name="description" content="之前有在已知树节点的情况下做过两级树菜单，如果是未知树节点的情况下，有可能是无限节点的延伸，这时可以用ng的inclue功能来实现，html结构大概如下：
-HTML:&amp;lt;ul class=&quot;list-unstyled&quot;&amp;gt;
-    &amp;lt;li ng-repeat=&quot;organ in $ctrl.organsList&quot; ng-click=&quot;$ctrl.selectOrgan(organ,&apos;">
+<meta name="description" content="RxJS是一种针对异步数据流编程工具，或者叫响应式扩展编程。  
+
+RxJS的目标就是异步编程，Angular2引入RxJS为了就是让异步变得简单和可控。
+取消订阅RxJS的核心就是基于观察者模式开发的，关于观察者模式有个关键点要注意，订阅和取消订阅一定要成对出现，不取消容易造成重复订阅的bug，严重的话可能内存泄露。
+以下是一个引入RxJs Subject的广播服务：
+export class">
 <meta property="og:type" content="article">
-<meta property="og:title" content="无限树节点">
-<meta property="og:url" content="http://eatingmiao.github.io/2016/12/17/tree/index.html">
+<meta property="og:title" content="RxJs订阅问题">
+<meta property="og:url" content="http://eatingmiao.github.io/2018/02/02/subscriptions/index.html">
 <meta property="og:site_name" content="Eating's Notes">
-<meta property="og:description" content="之前有在已知树节点的情况下做过两级树菜单，如果是未知树节点的情况下，有可能是无限节点的延伸，这时可以用ng的inclue功能来实现，html结构大概如下：
-HTML:&amp;lt;ul class=&quot;list-unstyled&quot;&amp;gt;
-    &amp;lt;li ng-repeat=&quot;organ in $ctrl.organsList&quot; ng-click=&quot;$ctrl.selectOrgan(organ,&apos;">
-<meta property="og:updated_time" content="2017-01-08T13:25:39.764Z">
+<meta property="og:description" content="RxJS是一种针对异步数据流编程工具，或者叫响应式扩展编程。  
+
+RxJS的目标就是异步编程，Angular2引入RxJS为了就是让异步变得简单和可控。
+取消订阅RxJS的核心就是基于观察者模式开发的，关于观察者模式有个关键点要注意，订阅和取消订阅一定要成对出现，不取消容易造成重复订阅的bug，严重的话可能内存泄露。
+以下是一个引入RxJs Subject的广播服务：
+export class">
+<meta property="og:updated_time" content="2018-02-02T13:54:19.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="无限树节点">
-<meta name="twitter:description" content="之前有在已知树节点的情况下做过两级树菜单，如果是未知树节点的情况下，有可能是无限节点的延伸，这时可以用ng的inclue功能来实现，html结构大概如下：
-HTML:&amp;lt;ul class=&quot;list-unstyled&quot;&amp;gt;
-    &amp;lt;li ng-repeat=&quot;organ in $ctrl.organsList&quot; ng-click=&quot;$ctrl.selectOrgan(organ,&apos;">
+<meta name="twitter:title" content="RxJs订阅问题">
+<meta name="twitter:description" content="RxJS是一种针对异步数据流编程工具，或者叫响应式扩展编程。  
+
+RxJS的目标就是异步编程，Angular2引入RxJS为了就是让异步变得简单和可控。
+取消订阅RxJS的核心就是基于观察者模式开发的，关于观察者模式有个关键点要注意，订阅和取消订阅一定要成对出现，不取消容易造成重复订阅的bug，严重的话可能内存泄露。
+以下是一个引入RxJs Subject的广播服务：
+export class">
 
 
 
@@ -78,7 +87,7 @@ HTML:&amp;lt;ul class=&quot;list-unstyled&quot;&amp;gt;
   };
 </script>
 
-  <title> 无限树节点 | Eating's Notes </title>
+  <title> RxJs订阅问题 | Eating's Notes </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -198,7 +207,7 @@ HTML:&amp;lt;ul class=&quot;list-unstyled&quot;&amp;gt;
             
             
               
-                无限树节点
+                RxJs订阅问题
               
             
           </h1>
@@ -207,8 +216,8 @@ HTML:&amp;lt;ul class=&quot;list-unstyled&quot;&amp;gt;
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-12-17T00:00:00+08:00" content="2016-12-17">
-              2016-12-17
+            <time itemprop="dateCreated" datetime="2018-02-02T00:00:00+08:00" content="2018-02-02">
+              2018-02-02
             </time>
           </span>
 
@@ -218,8 +227,8 @@ HTML:&amp;lt;ul class=&quot;list-unstyled&quot;&amp;gt;
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/12/17/tree/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/17/tree/" itemprop="commentsCount"></span>
+                <a href="/2018/02/02/subscriptions/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/02/02/subscriptions/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -238,33 +247,73 @@ HTML:&amp;lt;ul class=&quot;list-unstyled&quot;&amp;gt;
       
 
       
-        <span itemprop="articleBody"><p>之前有在已知树节点的情况下做过两级树菜单，如果是未知树节点的情况下，有可能是无限节点的延伸，这时可以用ng的inclue功能来实现，html结构大概如下：</p>
-<h4 id="HTML:">HTML:</h4><pre><code><span class="tag">&lt;<span class="title">ul</span> <span class="attribute">class</span>=<span class="value">"list-unstyled"</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"organ in $ctrl.organsList"</span> <span class="attribute">ng-click</span>=<span class="value">"$ctrl.selectOrgan(organ,'parent',$event)"</span>&gt;</span>
-        <span class="comment"></span>
-        <span class="tag">&lt;<span class="title">ul</span> <span class="attribute">ng-include</span>=<span class="value">"'organ-children.html'"</span>&gt;</span><span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
-<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/ng-template"</span> <span class="attribute">id</span>=<span class="value">"organ-children.html"</span>&gt;</span><span class="handlebars"><span class="xml">
-    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"organ in organ.children"</span> <span class="attribute">ng-click</span>=<span class="value">"$ctrl.selectOrgan(organ,'child',$event)"</span>&gt;</span>
-        <span class="comment"></span>
-        <span class="tag">&lt;<span class="title">ul</span> <span class="attribute">ng-if</span>=<span class="value">"organ.hadChildren=='C02'"</span> <span class="attribute">ng-include</span>=<span class="value">"'organ-children.html'"</span>&gt;</span><span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
-</span></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
-</code></pre><p>在子页面children.html的列表li也包着子页面本身，于是就像迭代自己一样可以形成未知的多级菜单。<br>如果一开始不是一次性获得整棵树，点击父节点才能获取子节点的话，还得注意使用阻止冒泡的方法来阻止父节点的事件。<br>ng的$event事件里就带有阻止冒泡方法stopPropagation()，点击节点的方法如下：</p>
-<h4 id="JS:">JS:</h4><pre><code><span class="variable">$ctrl</span>.selectOrgan = <span class="keyword">function</span>(<span class="literal">item</span>,name,<span class="variable">$e</span>) {
-    <span class="variable">$ctrl</span>.selected = item;
-    if (!!name) {
-        if (name == <span class="string">'child'</span>) {
-            // 阻止冒泡
-            <span class="variable">$e</span>.stopPropagation();
-        }
-        if (item.hadChildren == <span class="string">'C02'</span> &amp;&amp; !item.hasOwnProperty(<span class="string">'children'</span>)) {
-            <span class="variable">$ctrl</span>.getData(item);
-        }
-    }
-};
-</code></pre></span>
+        <span itemprop="articleBody"><blockquote>
+<p>RxJS是一种针对异步数据流编程工具，或者叫响应式扩展编程。  </p>
+</blockquote>
+<p>RxJS的目标就是异步编程，Angular2引入RxJS为了就是让异步变得简单和可控。</p>
+<h3 id="取消订阅">取消订阅</h3><p>RxJS的核心就是基于观察者模式开发的，关于观察者模式有个关键点要注意，订阅和取消订阅一定要成对出现，不取消容易造成重复订阅的bug，严重的话可能内存泄露。</p>
+<p>以下是一个引入RxJs Subject的广播服务：</p>
+<pre><code><span class="keyword">export</span> <span class="keyword">class</span> Broadcaster {
+  <span class="keyword">private</span> _eventBus: Subject&lt;BroadcastEvent&gt;;
+
+  <span class="constructor"><span class="keyword">constructor</span>() </span>{
+    <span class="keyword">this</span>._eventBus = <span class="keyword">new</span> Subject&lt;BroadcastEvent&gt;();
+  }
+
+  broadcast(key: <span class="built_in">any</span>, data?: <span class="built_in">any</span>) {
+    <span class="keyword">this</span>._eventBus.next({key, data});
+  }
+
+  on&lt;T&gt;(key: <span class="built_in">any</span>): Observable&lt;T&gt; {
+    <span class="keyword">return</span> <span class="keyword">this</span>._eventBus.asObservable()
+      .filter(event =&gt; event.key === key)
+      .map(event =&gt; &lt;T&gt;event.data);
+  }
+}
+</code></pre><p>其中Subject既是一个Observable，也是一个Observer(被观察者和观察者):</p>
+<ul>
+<li>更改数据时触发observer的next()进行传递；  </li>
+<li>filter()根据key值返回一个新的Observable，调用next()传递event给下一个observer；  </li>
+<li>map()根据event返回一个新的Observable，并调用next()传递event.data给下一个observer;  </li>
+<li>最后将结果传递给页面的subscribe订阅块（订阅块用完要取消掉）。</li>
+</ul>
+<p>这个服务有一个不够完善的地方就是没有订阅块的取消，直接交给了页面组件处理，如果不了解观察者模式的人恐怕就会忘记取消订阅而出现重复的问题。</p>
+<p>angular@v2~4的EventEmitter也是参考RxJS的产物，若用EventEmitter再写一个类似广播的服务，可以带一个尾巴用于取消订阅，把订阅和取消订阅封装在一起成对出现：</p>
+<pre><code><span class="keyword">public</span> on(callback: <span class="built_in">any</span>, didLeave: <span class="built_in">any</span>): <span class="built_in">any</span> {
+    <span class="keyword">let</span> subscriber = <span class="keyword">this</span>.emitter.subscribe(callback);
+    didLeave.subscribe(() =&gt; {
+      <span class="keyword">this</span>.unsubscribe(subscriber);
+    });
+    <span class="keyword">return</span> subscriber;
+}
+</code></pre><p>didLeave是ionView的页面离开Observable，并且这应该是一个SafeSubscriber，RxJs里SafeSubscriber在onCompleted和onError时会调用unsubscribe()。</p>
+<p>关于angular1.x我也曾经遇到一个bug，就是监听路由stateChange时有重复累加的问题，跟没有取消订阅是一样的道理。</p>
+<h3 id="管理订阅">管理订阅</h3><p>除了取消订阅这个操作，我们也可以使用takeUntil来管理subscription。</p>
+<p>比如在页面组件离开时取消订阅的方式可以改成：</p>
+<pre><code><span class="keyword">public</span> on(callback: <span class="keyword">any</span>, didLeave: <span class="keyword">any</span>): <span class="keyword">any</span> {
+  <span class="keyword">return</span> <span class="keyword">this</span>.emitter
+    .takeUntil(didLeave)
+    .subscribe(callback);
+}
+</code></pre><p>其他操作符：</p>
+<ul>
+<li>take(n): 在停止observable前发出N个值。  </li>
+<li>takeWhile(predicate): 通过断言来测试发出的值，如果一旦函数返回false，则完成observable。  </li>
+<li>first(): 发出首个值和完成通知。  </li>
+<li>first(predicate): 根据断言检查每个值，如果函数返回true，则发出值和完成通知。</li>
+</ul>
+<p>当有多个订阅时，可以把订阅组合成单个subscription，通过创建一个父订阅把其他subscriptions作为子merge进来，这样的话只取消父订阅就可以了。</p>
+<h3 id="总结:">总结:</h3><ul>
+<li>应该尽可能的使用takeUntil、takeWhile及其他操作符来管理RxJS subscriptions，而不是频繁地取消订阅。  </li>
+<li>如果在一个组件中发现2个或以上的subscriptions，应该用组合形式来进行订阅和取消订阅的处理。  </li>
+</ul>
+<p>对于跨时间的复杂异步任务，回调和Promise捉襟见肘，(俗称回调地狱)，RxJS可以比较优雅地组合和控制。</p>
+<p>相关文档：</p>
+<ul>
+<li><a href="http://reactivex.io/rxjs/class/es6/Subject.js~Subject.html" target="_blank" rel="external">RxJS DOC</a></li>
+<li><a href="https://github.com/jhusain/observable-spec" target="_blank" rel="external">Specification for Observable</a></li>
+</ul>
+</span>
       
     </div>
 
@@ -274,6 +323,10 @@ HTML:&amp;lt;ul class=&quot;list-unstyled&quot;&amp;gt;
           
             <a href="/tags/AngularJs/" rel="tag">#AngularJs</a>
           
+            <a href="/tags/Ionic/" rel="tag">#Ionic</a>
+          
+            <a href="/tags/RxJs/" rel="tag">#RxJs</a>
+          
         </div>
       
 
@@ -281,17 +334,13 @@ HTML:&amp;lt;ul class=&quot;list-unstyled&quot;&amp;gt;
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/11/01/type/" rel="next" title="JavaScript类型">
-                <i class="fa fa-chevron-left"></i> JavaScript类型
+              <a href="/2016/12/17/tree/" rel="next" title="无限树节点">
+                <i class="fa fa-chevron-left"></i> 无限树节点
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/02/02/subscriptions/" rel="prev" title="RxJs订阅问题">
-                RxJs订阅问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -318,8 +367,8 @@ HTML:&amp;lt;ul class=&quot;list-unstyled&quot;&amp;gt;
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/12/17/tree/"
-           data-title="无限树节点" data-url="http://eatingmiao.github.io/2016/12/17/tree/">
+      <div class="ds-thread" data-thread-key="2018/02/02/subscriptions/"
+           data-title="RxJs订阅问题" data-url="http://eatingmiao.github.io/2018/02/02/subscriptions/">
       </div>
     
   </div>
@@ -409,7 +458,7 @@ HTML:&amp;lt;ul class=&quot;list-unstyled&quot;&amp;gt;
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTML:"><span class="nav-number">1.</span> <span class="nav-text">HTML:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JS:"><span class="nav-number">2.</span> <span class="nav-text">JS:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#取消订阅"><span class="nav-number">1.</span> <span class="nav-text">取消订阅</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理订阅"><span class="nav-number">2.</span> <span class="nav-text">管理订阅</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结:"><span class="nav-number">3.</span> <span class="nav-text">总结:</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
