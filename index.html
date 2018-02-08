@@ -209,6 +209,253 @@
             
               
                 
+                <a class="post-title-link" href="/2018/02/08/var&this/" itemprop="url">
+                  变量提升 & this的指向
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2018-02-08T00:00:00+08:00" content="2018-02-08">
+              2018-02-08
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/02/08/var&this/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/02/08/var&this/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="变量提升">变量提升</h2><h3 id="函数及变量的声明都将被提升到执行代码的最顶部">函数及变量的声明都将被提升到执行代码的最顶部</h3><p>函数声明：</p>
+<pre><code>hello();
+
+<span class="function"><span class="keyword">function</span> <span class="title">hello</span>(<span class="params"></span>) </span>{
+  <span class="built_in">console</span>.log(<span class="string">"Hello"</span>);
+}
+</code></pre><p>变量声明：</p>
+<pre><code>x = 5<span class="comment">;</span>
+console.log(x)<span class="comment">;</span>
+var x<span class="comment">;</span>
+</code></pre><h3 id="变量初始化和函数表达式则不会被提升">变量初始化和函数表达式则不会被提升</h3><p>变量初始化：</p>
+<pre><code><span class="variable"><span class="keyword">var</span> x</span> = <span class="number">5</span>;
+console.log(x+y); <span class="comment">// NaN</span>
+<span class="variable"><span class="keyword">var</span> y</span> = <span class="number">7</span>;
+</code></pre><p>函数表达式：</p>
+<pre><code><span class="keyword">add</span>(); <span class="comment">// TypeError: add is not a function</span>
+
+<span class="keyword">var</span> ab = <span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">()</span> <span class="comment">{}</span>;</span> <span class="comment">// 表达式</span>
+<span class="keyword">new</span> <span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">()</span> <span class="comment">{}</span>;</span> <span class="comment">// new表达式</span>
+(<span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">()</span> <span class="comment">{}</span>);</span> <span class="comment">// 分组操作符只能包含表达式</span>
+</code></pre><ul>
+<li>块中的声明大部分都不会被现代浏览器提升，包括块中的隐式声明</li>
+</ul>
+<h2 id="this的指向">this的指向</h2><blockquote>
+<p>this与当前执行环境，而非声明环境有关。  </p>
+</blockquote>
+<p>this的指向需要根据函数上下文来判断，一般指向函数执行时的当前对象，但也可以通过其它方式来改变它的指向。</p>
+<h3 id="作为单独的函数被调用">作为单独的函数被调用</h3><pre><code><span class="keyword">var</span> name = <span class="string">"global"</span>;
+<span class="function"><span class="keyword">function</span> <span class="title">echoName</span>(<span class="params"></span>) </span>{
+  <span class="keyword">var</span> name = <span class="string">"func"</span>
+  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name); <span class="comment">// global</span>
+}
+echoName();
+</code></pre><p>可以理解为add()是window的一个属性，于是this指向全局变量。</p>
+<h3 id="作为构造函数被调用">作为构造函数被调用</h3><pre><code><span class="keyword">var</span> name = <span class="string">"global"</span>;
+<span class="function"><span class="keyword">function</span> <span class="title">echoName</span>(<span class="params"></span>) </span>{
+  <span class="keyword">this</span>.name = <span class="string">"func"</span>;
+}
+
+<span class="keyword">var</span> fn = <span class="keyword">new</span> echoName();
+<span class="built_in">console</span>.log(fn.name); <span class="comment">// func</span>
+</code></pre><p>构造函数中的this一般指向构造出来的实例化对象，但也有另一种情况：</p>
+<pre><code><span class="comment">// 构造函数1</span>
+<span class="function"><span class="keyword">function</span> <span class="title">echo1</span>(<span class="params"></span>) </span>{
+  <span class="keyword">this</span>.name = <span class="string">"name1"</span>;
+  <span class="keyword">return</span> { name: <span class="number">1</span> }; <span class="comment">// 返回一个对象</span>
+}
+<span class="keyword">var</span> echo1 = <span class="keyword">new</span> echo1();
+<span class="built_in">console</span>.log(echo1.name); <span class="comment">// 1</span>
+
+<span class="comment">// 构造函数2</span>
+<span class="function"><span class="keyword">function</span> <span class="title">echo2</span>(<span class="params"></span>) </span>{
+  <span class="keyword">this</span>.name = <span class="string">"name2"</span>;
+  <span class="keyword">return</span> <span class="number">2</span>; <span class="comment">// 返回一个非对象</span>
+}
+<span class="keyword">var</span> echo2 = <span class="keyword">new</span> echo2();
+<span class="built_in">console</span>.log(echo2.name); <span class="comment">// name2</span>
+</code></pre><p>当构造函数的返回值是一个对象时，this指向返回对象，<br>如果返回值不是对象时，this指向构造函数的实例对象。</p>
+<h3 id="作为对象的方法被调用">作为对象的方法被调用</h3><pre><code><span class="keyword">var</span> Obj = {
+  name: <span class="string">"obj"</span>,
+  say: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);
+  }
+}
+
+Obj.say(); <span class="comment">// obj</span>
+</code></pre><p>say()作为对象Obj的方法被Obj调用，this指向的便是Obj对象。<br>但如果使用表达式调用say方法的话：</p>
+<pre><code><span class="keyword">var</span> Obj = {
+  name: <span class="string">"obj"</span>,
+  say: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+       <span class="built_in">console</span>.log(<span class="keyword">this</span>);
+    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);
+  }
+}
+
+<span class="keyword">var</span> echoName = Obj.say;
+echoName(); <span class="comment">// 打印出window和空</span>
+</code></pre><p>echoName是一个全局变量，把Obj.say先赋值给echoName再调用的话，this会指向window。</p>
+<h3 id="使用call或者apply方法">使用call或者apply方法</h3><p>call()和apply()方法从Function对象的原型继承而来，使用call()和apply()方法会改变this的指向，其函数内部的this可绑定到 call()和apply()方法指定的第一个对象上。</p>
+<pre><code><span class="keyword">var</span> Obj = {
+  name: <span class="string">"obj"</span>,
+  say: <span class="function"><span class="keyword">function</span>(<span class="params">name</span>) </span>{
+       <span class="keyword">this</span>.name = name;
+       <span class="built_in">console</span>.log(<span class="keyword">this</span>);
+    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);
+  }
+}
+<span class="keyword">var</span> Obj2 = {
+    name: <span class="string">"obj2"</span>
+  };
+  <span class="keyword">var</span> echoName = Obj.say;
+  echoName.call(Obj2,<span class="number">2</span>); <span class="comment">// {name: 2} 2</span>
+  <span class="built_in">console</span>.log(Obj.name); <span class="comment">// obj</span>
+</code></pre><h3 id="使用bind方法">使用bind方法</h3><p>bind()和call、apply不同的是，bind是新创建一个函数，然后把当前上下文this绑定到bind()的参数对象中并返回该函数。bind后函数不会执行，只是返回一个改变了this指向的函数副本，而call和apply是直接执行函数。</p>
+<pre><code><span class="keyword">var</span> Obj = {
+  name: <span class="string">"obj"</span>,
+  say: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+    <span class="function"><span class="keyword">function</span> <span class="title">_say</span>(<span class="params"></span>) </span>{
+      <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);    
+    }
+    <span class="keyword">return</span> _say.bind(Obj);
+  }()
+}
+Obj.say(); <span class="comment">// 空</span>
+</code></pre><p>需要注意的是，函数表达式的声明不会被提升，所以在_say方法调用的时候，Obj还没有被定义，this指向的是全局变量window。<br>声明Obj后再调用_say方法则能打印出obj，此时this指向Obj:</p>
+<pre><code><span class="keyword">var</span> Obj = {name: <span class="string">"obj"</span>};
+Obj.say = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+  <span class="function"><span class="keyword">function</span> <span class="title">_say</span>(<span class="params"></span>) </span>{
+    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);    
+  }
+  <span class="keyword">return</span> _say.bind(Obj);
+}()
+Obj.say(); <span class="comment">// obj</span>
+</code></pre><h3 id="使用定时器setTimeout和setInterval">使用定时器setTimeout和setInterval</h3><pre><code><span class="keyword">var</span> Obj = {
+  name: <span class="string">"time"</span>,
+  say: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+        <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);
+    }, <span class="number">0</span>);
+  }
+}
+Obj.say(); <span class="comment">// 空</span>
+</code></pre><blockquote>
+<p>超时调用的代码都是在全局作用域中执行的，因此函数中this的值在非严格模式下指向window对象，在严格模式下是undefined。 ——《JavaScript高级程序设计》</p>
+</blockquote>
+<p>setTimeout和setInterval方法是挂在window对象下的。此时的this指向应该为全局变量window。</p>
+<h3 id="ES6箭头函数">ES6箭头函数</h3><p>箭头函数有几个使用注意点:</p>
+<ul>
+<li><p>函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。</p>
+</li>
+<li><p>不可以当作构造函数，也就是说，不可以使用new命令，否则会抛出一个错误。</p>
+</li>
+<li><p>不可以使用arguments对象，该对象在函数体内不存在。如果要用，可以用Rest参数代替。</p>
+</li>
+<li><p>不可以使用yield命令，因此箭头函数不能用作Generator函数。</p>
+</li>
+</ul>
+<p>上面四点中，第一点尤其值得注意。this对象的指向是可变的，但是在箭头函数中，它是固定的。</p>
+<p>定时器的示例中，若是把定时器的function改成箭头函数：</p>
+<pre><code><span class="keyword">var</span> Obj = {
+  name: <span class="string">"time"</span>,
+  say: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+    setTimeout(() =&gt; {
+        <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);
+    }, <span class="number">0</span>);
+  }
+}
+Obj.say(); <span class="comment">// time</span>
+</code></pre><p>此时定时器的this指向Obj对象。</p>
+<h3 id="严格模式">严格模式</h3><ul>
+<li>在全局作用域中，this指向window对象。</li>
+<li>在全局作用域中，作为单独的函数被调用时，this指向undefined。</li>
+<li>在全局作用域中，作为对象的方法被调用时，this指向调用函数的对象实例。</li>
+<li>在全局作用域中，作为构造函数被调用时，this指向构造函数创建的对象实例。</li>
+</ul>
+<p>另外，严格模式创设了第三种作用域：eval作用域。<br>正常模式下，eval语句的作用域，取决于它处于全局作用域，还是处于函数作用域。<br>严格模式下，eval语句本身就是一个作用域，所生成的变量只能用于eval内部。</p>
+<pre><code><span class="pi">"use strict"</span>;
+<span class="keyword">var</span> x = <span class="number">2</span>;
+<span class="built_in">console</span>.info(<span class="built_in">eval</span>(<span class="string">"var x = 5; x"</span>)); <span class="comment">// 5</span>
+<span class="built_in">console</span>.info(x); <span class="comment">// 2</span>
+</code></pre>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/02/02/subscriptions/" itemprop="url">
                   RxJs订阅问题
                 </a>
@@ -1215,167 +1462,14 @@ $scope.getWifiList = <span class="function"><span class="keyword">function</span
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/04/angularjs without jq/" itemprop="url">
-                  AngularJs without JQ
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-12-04T00:00:00+08:00" content="2015-12-04">
-              2015-12-04
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/12/04/angularjs without jq/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/04/angularjs without jq/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h4 id="引言">引言</h4><blockquote>
-<p>当建立了Angular的项目时，你不应该添加完整的jQuery库。jQlite已经包含在Angular中，所有jQuery必要的功能它都有。这是因为把jQuery添加到Angular项目中将很难让你完全掌握Angular的核心优势和数据绑定的力量。</p>
-</blockquote>
-<p>刚开始踏入angular的大坑时，因为项目比较赶，大家都还没掌握好ng的要点就上阵了，于是前期项目引用了完整的JQ库。在码控制层的时候，脑海中第一时间浮现通常都是各种$，现在功能做得差不多了，就开始项目优化，尝试把所有JQ都用ng的方式代替。<br>举个栗子：<br>比如做下面这种侧边菜单栏时，<br><img src="http://7xowup.com1.z0.glb.clouddn.com/angular%20without%20jq.gif" alt="side-bar"><br>如果通过JQ来实现，就是对DOM进行addClass和removeClass更替操作，如果完全不用JQ呢？<br>其实完全可以利用ng设计的ng-class和ng-if(ng-show/ng-hide)绑定数据来进行样式变化：</p>
-<h4 id="HTML:">HTML:</h4><pre><code><span class="tag">&lt;<span class="title">ion-side-menu</span> <span class="attribute">side</span>=<span class="value">"left"</span> <span class="attribute">width</span>=<span class="value">"180"</span> <span class="attribute">expose-aside-when</span>=<span class="value">"large"</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">ion-content</span> <span class="attribute">class</span>=<span class="value">"menu-list"</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">ul</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"parent in menuList"</span> <span class="attribute">ng-click</span>=<span class="value">"setPActive(parent.id)"</span>&gt;</span>
-                <span class="tag">&lt;<span class="title">a</span> <span class="attribute">class</span>=<span class="value">"item item-icon-left item-icon-right"</span> <span class="attribute">ng-class</span>=<span class="value">"{0:'',1:'parent-active'}[parent.isPActive]"</span> <span class="attribute">ng-click</span>=<span class="value">"setPActive(parent.id)"</span>&gt;</span>
-                    <span class="tag">&lt;<span class="title">i</span> <span class="attribute">class</span>=<span class="value">"icon "</span>&gt;</span><span class="tag">&lt;/<span class="title">i</span>&gt;</span><span class="comment"></span>
-                    <span class="tag">&lt;<span class="title">i</span> <span class="attribute">class</span>=<span class="value">"icon"</span> <span class="attribute">ng-class</span>=<span class="value">"{0:'ion-ios-arrow-right',1:'ion-ios-arrow-down'}[parent.isOpen]"</span>&gt;</span><span class="tag">&lt;/<span class="title">i</span>&gt;</span>
-                <span class="tag">&lt;/<span class="title">a</span>&gt;</span>
-                <span class="tag">&lt;<span class="title">ul</span> <span class="attribute">ng-if</span>=<span class="value">"!!parent.child"</span> <span class="attribute">ng-class</span>=<span class="value">"{0:'',1:'child-open'}[parent.isOpen]"</span> <span class="attribute">class</span>=<span class="value">"child-list"</span>&gt;</span>
-                    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"child in parent.child"</span> <span class="attribute">ng-class</span>=<span class="value">"{0:'',1:'child-active'}[child.isCActive]"</span> <span class="attribute">ng-click</span>=<span class="value">"setCActive(parent.id,child.id)"</span>&gt;</span><span class="comment"></span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
-                <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
-            <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">ion-content</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">ion-side-menu</span>&gt;</span>
-</code></pre><h4 id="JS:">JS:</h4><pre><code><span class="variable">$scope</span>.menuList=[
-    {id:<span class="number">1</span>,name:<span class="string">'热点'</span>,icon:<span class="string">'ion-pinpoint'</span>},
-    {id:<span class="number">2</span>,name:<span class="string">'xbms'</span>,icon:<span class="string">'ion-android-settings'</span>,child:[
-        {id:<span class="number">1</span>,name:<span class="string">'电力监控'</span>},
-        {id:<span class="number">2</span>,name:<span class="string">'电梯监控'</span>},
-        {id:<span class="number">3</span>,name:<span class="string">'电力监控'</span>},
-        {id:<span class="number">4</span>,name:<span class="string">'照明监控'</span>},
-        {id:<span class="number">5</span>,name:<span class="string">'排水监控'</span>},
-        {id:<span class="number">6</span>,name:<span class="string">'水电计费'</span>},
-        {id:<span class="number">7</span>,name:<span class="string">'空调系统'</span>}
-    ]},
-    {id:<span class="number">3</span>,name:<span class="string">'车位状况'</span>,icon:<span class="string">'ion-android-car'</span>},
-    {id:<span class="number">4</span>,name:<span class="string">'巡更系统'</span>,icon:<span class="string">'ion-android-star-outline'</span>},
-];
-angular.forEach(<span class="variable">$scope</span>.menuList,<span class="keyword">function</span>(e){
-    e.isOpen=<span class="number">0</span>;
-    e.isPActive=<span class="number">0</span>;
-    if(!!e.child) e.isCActive=<span class="number">0</span>;
-});
-<span class="variable">$scope</span>.setPActive = <span class="keyword">function</span>(<span class="variable">$id</span>) {
-    angular.forEach(<span class="variable">$scope</span>.menuList,function(e){
-        if(e.id===<span class="variable">$id</span>){
-            if(!!e.child) {
-                e.isOpen=<span class="number">1</span>;
-                e.isCActive=<span class="number">1</span>;
-            }
-            e.isPActive=<span class="number">1</span>;
-        }else{
-            e.isOpen=<span class="number">0</span>;
-            e.isPActive=<span class="number">0</span>;
-        }
-    });    
-};
-<span class="variable">$scope</span>.setCActive = <span class="keyword">function</span>(<span class="variable">$pid</span>,<span class="variable">$cid</span>) {
-    angular.forEach(<span class="variable">$scope</span>.menuList,function(e1){
-        if(e1.id===<span class="variable">$pid</span>){
-            angular.forEach(e1.child,function(e2){
-                if(e2.id===<span class="variable">$cid</span>){
-                    e2.isCActive=<span class="number">1</span>;
-                }else{
-                    e2.isCActive=<span class="number">0</span>;
-                }
-            });    
-        }
-    });    
-};
-</code></pre><p>其实说到底思维是差不多的，只是既然决定在Angular的框架下进行工作，还另外引入一个JQ库的确是显得累赘和多余，尝试用ng的方式来实现一样的效果也未免不可。</p>
-<p>相关资料：</p>
-<ul>
-<li><a href="http://www.angularjs.cn/A09X" target="_blank" rel="external">Think in AngularJs</a></li>
-</ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
         </div>
@@ -1414,7 +1508,7 @@ angular.forEach(<span class="variable">$scope</span>.menuList,<span class="keywo
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-count">11</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1428,7 +1522,7 @@ angular.forEach(<span class="variable">$scope</span>.menuList,<span class="keywo
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
