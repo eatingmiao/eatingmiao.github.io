@@ -205,6 +205,110 @@
             
               
                 
+                <a class="post-title-link" href="/2016/01/17/$stateParams/" itemprop="url">
+                  $stateParams
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-17T00:00:00+08:00" content="2016-01-17">
+              2016-01-17
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/17/$stateParams/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/17/$stateParams/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>关于ng路由的各种使用情况，要是认真写起来就一匹布那么长了。虽然项目容积一大起来感觉路由就容易乱，但如果能灵活运用路由的各种机制还是蛮方便的。<br>比如说，跳转页面时，两个页面的controller之间传输数据，如果只是传个参数id什么的，就没必要调用另一个函数来进行传输啦，用route自带的机制来传id也是蛮方便的。<br>只要在页面的data-ui-sref跳转state中加上参数，然后在$stateProvider声明state的url时加上参数名，那么在controller中就可以调用$stateParams来获取需要的参数了。</p>
+<h4 id="HTML:">HTML:</h4><pre><code>&lt;<span class="keyword">button </span><span class="preprocessor">data</span>-ui-sref=<span class="string">"order.comment({orderId:detail.orderId,goodsId:detail.goodsId})"</span>&gt;订单&lt;/<span class="keyword">button&gt;</span>
+</code></pre><h4 id="JS:">JS:</h4><pre><code>.state(<span class="string">'order.comment'</span>, {
+    js:
+    url: <span class="string">'/comment?orderId&amp;goodsId'</span>,
+    cache:false,
+    views: {
+        <span class="string">'content@'</span>: {
+            templateUrl: <span class="string">'module/mine/views/my-order/order-comment.html'</span>,
+            controller: <span class="string">'orderCommentController'</span>
+        }
+    }
+})
+</code></pre><p>后来在stackoverflow上面看到一个问题也是值得注意的：</p>
+<p>What is the difference between: $routeParams and $stateParams？</p>
+<p>有一个回答这么说道：<br>Both are from different router modules. You can use anyone in your application.<br>If you use ngRoute module, then you should use <a href="https://docs.angularjs.org/api/ngRoute" target="_blank" rel="external">$routeParams</a> . This is provided by Angular team. It has only one ng-view. you can not do nested views functionality.<br>If you use ui-router module, then you should use <a href="ttps://github.com/angular-ui/ui-router" target="_blank" rel="external">$stateParams</a>. This is from contributed module. It has number of additional functionality compare than ngRoute . It supports nested view concepts. you can specify multiple ui-view</p>
+<p>See more: <a href="http://www.amasik.com/angularjs-ngroute-vs-ui-router/" target="_blank" rel="external">http://www.amasik.com/angularjs-ngroute-vs-ui-router/</a></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/12/04/angularjs without jq/" itemprop="url">
                   AngularJs without JQ
                 </a>
@@ -387,7 +491,7 @@ angular.forEach(<span class="variable">$scope</span>.menuList,<span class="keywo
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
