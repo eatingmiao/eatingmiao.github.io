@@ -205,6 +205,101 @@
             
               
                 
+                <a class="post-title-link" href="/2016/02/12/ng bug/" itemprop="url">
+                  一个大坑
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-02-12T00:00:00+08:00" content="2016-02-12">
+              2016-02-12
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/12/ng bug/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/12/ng bug/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>开始使用ng和ionic做项目也是赶鸭子上架，想不到真的踏进了一个大坑orz</p>
+<p>刚开始的布局很乱，后来改了页面布局整理了一下view和content，然后发现在ion-content的$scope内，有些数据在改变布局前流动正常，但是改变后就不能双向流动了。</p>
+<p>百思不得其解就查了一下，原来ionContent基于controller又创建了一个新的child scope，于是在ion-content对变量属性赋值时，新的值就自动绑定到了这个child scope上，怪不得找不到值啊！ </p>
+<p>于是只好把这种数据包在一个对象里了，通过原型链来访问到controller scope上的数据对象。<br>于是……要调用的变量名变得更长了orz</p>
+<p>相关资料：</p>
+<ul>
+<li><a href="http://www.cnblogs.com/whitewolf/p/ngmodel-zhi-bu-geng-xin-slash-xian-shi.html" target="_blank" rel="external">ngModel 值不更新/显示</a></li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/01/17/$stateParams/" itemprop="url">
                   $stateParams
                 </a>
@@ -491,7 +586,7 @@ angular.forEach(<span class="variable">$scope</span>.menuList,<span class="keywo
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
