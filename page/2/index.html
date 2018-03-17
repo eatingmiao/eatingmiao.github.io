@@ -205,6 +205,121 @@
             
               
                 
+                <a class="post-title-link" href="/2016/03/16/src error/" itemprop="url">
+                  图片的404处理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-03-16T00:00:00+08:00" content="2016-03-16">
+              2016-03-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/16/src error/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/16/src error/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>做网站时最常遇到的问题之一，先说说jq的做法。<br>在标签上绑定onerror事件：</p>
+<h4 id="HTML:">HTML:</h4><pre><code>&lt;<span class="tag">img</span> src=<span class="string">"exist.png"</span> onerror=<span class="string">"errorSrc(this) "</span>/&gt; 
+</code></pre><p>再写个方法把加载失败的图片替换成404图片：</p>
+<h4 id="JQ:">JQ:</h4><pre><code><span class="function"><span class="keyword">function</span> <span class="title">errorSrc</span>(<span class="params">img</span>)</span>{ 
+    $(img).attr(<span class="string">"src"</span>, <span class="string">"img/404.png"</span>);
+}
+</code></pre><p>就大功告成了！但是要注意的是要把errorSrc放在html的head里提前加载，要不然网页载入时即使图片出错也可能还没读取到errorSrc处理函数。而且浏览器的控制窗其实还是会报get的错。</p>
+<p>如果在angular的框架下就更方便了，angular自带一个ngSrc指令，我们可以利用这个指令，自己写个angular指令，如下：</p>
+<h4 id="ngJS:">ngJS:</h4><pre><code>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+<span class="pi">    'use strict'</span>;
+    <span class="comment">//加载指令</span>
+    angular.module(<span class="string">'app'</span>)
+        .directive(<span class="string">'errSrc'</span>, [
+            <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+                <span class="keyword">return</span> {
+                    link: <span class="function"><span class="keyword">function</span>(<span class="params">scope, element, attrs</span>) </span>{
+                          element.bind(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+                            <span class="keyword">if</span> (attrs.src != attrs.errSrc) {
+                                  attrs.$set(<span class="string">'src'</span>, attrs.errSrc);
+                            }
+                          });
+                    }
+                }
+            }
+        ])
+}());
+</code></pre><h4 id="ngHTML:">ngHTML:</h4><pre><code>&lt;<span class="tag">img</span> ng-src=<span class="string">""</span> err-src=<span class="string">"img/404.jpg"</span>/&gt;
+</code></pre><p>于是，angular在每次编译网页的时候，就会把已经不存在的图片换成了指定的img/404.jpg，而且这么浏览器控制窗也没有任何错误警告（强迫症福音www）。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/02/12/ng bug/" itemprop="url">
                   一个大坑
                 </a>
@@ -586,7 +701,7 @@ angular.forEach(<span class="variable">$scope</span>.menuList,<span class="keywo
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

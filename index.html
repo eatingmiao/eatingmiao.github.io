@@ -209,6 +209,187 @@
             
               
                 
+                <a class="post-title-link" href="/2018/03/17/regx/" itemprop="url">
+                  正则表达式总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2018-03-17T00:00:00+08:00" content="2018-03-17">
+              2018-03-17
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/03/17/regx/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/17/regx/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="语法">语法</h2><h3 id="基本字符">基本字符</h3><p>. ： 匹配除了换行符之外的任何单个字符。<br>\ ： 在非特殊字符之前的反斜杠表示下一个字符是特殊的，不能从字面上解释。<br>| ： 逻辑或操作符。<br>[] ：定义一个字符集合，匹配字符集合中的一个字符，在字符集合里面像.，\这些字符都表示其本身。<br>[^] ：对一个集合取非。<br>- ：定义一个区间，例如[A-Z]，其首尾字符在 ASCII 字符集里面。<br>() ：分组。<br>(?:) ： 匹配分组但不捕获该分组。</p>
+<h3 id="数量字符">数量字符</h3><p>{m,n} ：匹配前面一个字符至少 m 次至多 n 次重复，{m}表示匹配 m 次，{m,}表示至少 m 次。<br>+ ： 匹配前面一个表达式一次或者多次，相当于 {1,}，至少 1 次。<br>* ： 匹配前面一个表达式零次或者多次，相当于 {0,}，至少 0 次。<br>? ： 单独使用匹配前面一个表达式零次或者一次，相当于 {0,1}，如果跟在任何量词*,+,?,{}后面的时候将会使量词变为非贪婪模式（尽量匹配少的字符），默认是使用贪婪模式。比如对 “123abc” 应用 /\d+/ 将会返回 “123”，如果使用 /\d+?/,那么就只会匹配到 “1”。</p>
+<h3 id="定位字符">定位字符</h3><p>^ ： 匹配表达式的开始。<br>\$ ： 匹配表达式的结束。<br>\b ：匹配单词边界。<br>\B ：匹配非单词边界。<br>\A ：匹配字符串开头。<br>\Z ：匹配字符串结尾。<br>(?=p) ：匹配 p 前面的位置。(?&lt;=p)<br>(?!p) ：匹配不是 p 前面的位置。(?&lt;!p)  </p>
+<h3 id="特殊字符">特殊字符</h3><p>\d ：表示一位数字，相当于[0-9]。（d = digit）<br>\D ：表示一位非数字 ，相当于[^0-9]。<br>\s ：表示空白符，包括空格，水平制表符（\t），垂直制表符（\v），换行符（\n），回车符（\r），换页符（\f），相当于[\t\v\n\r\f]。（s = space）<br>\S ：表示非空白符，相当于[^\t\v\n\r\f]。<br>\w ：表示数字大小写字母和下划线，相当于[0-9a-zA-Z]。(w = word)<br>\W ：表示非单词字符，相当于[^0-9a-zA-Z]。 </p>
+<h3 id="标志字符">标志字符</h3><p>g ： 全局搜索。（g = global）<br>i ：不区分大小写。(i = ignore)<br>m ：多行搜索。(m = multi)</p>
+<h2 id="运用">运用</h2><p>JS支持正则字符串的方法：</p>
+<ul>
+<li>split 返回一个分割字符串的数组</li>
+<li>search 返回匹配到子串的起始位置，匹配不到返回-1 </li>
+<li>replace 接受两个参数，第一个是要被替换的文本，可以是正则也可以是字符串，第二个是替换成的文本，可以是字符串或者函数，字符串可以使用一些特殊的变量来替代前面捕获到的子串。</li>
+</ul>
+<p>example:</p>
+<pre><code><span class="comment">// 将'@@...@@'Markdown语法变成'&lt;blink&gt;...&lt;/blink&gt;'</span>
+<span class="function"><span class="keyword">function</span> <span class="title">replaceMD</span>(<span class="params">str</span>) </span>{
+    <span class="keyword">return</span> str.replace(<span class="regexp">/@@(.*?)@@/g</span>, <span class="string">"&lt;blink&gt;$1&lt;/blink&gt;"</span>)
+}
+<span class="keyword">var</span> rstr = replaceMD(<span class="string">'@@whatever@@'</span>);
+<span class="built_in">console</span>.log(rstr); <span class="comment">// &lt;blink&gt;whatever&lt;/blink&gt;</span>
+
+<span class="comment">/* 特殊变量 */</span>
+<span class="comment">// $$ 插入一个 "$"  </span>
+<span class="comment">// $&amp; 插入匹配的子串</span>
+<span class="comment">// $` 插入当前匹配的子串左边的内容</span>
+<span class="comment">// $' 插入当前匹配的子串右边的内容</span>
+<span class="comment">// $n 插入第 n 个括号匹配的字符串</span>
+</code></pre><ul>
+<li>match 没有找到任何匹配的文本时返回 null ，否则返回一个数组，数组第 0 个元素包含匹配到的文本，其余元素放的是正则捕获的文本, 包含两个对象属性 index 表示匹配文本在字符串中的位置，input 表示被解析的原始字符串。</li>
+</ul>
+<p>example:</p>
+<pre><code><span class="comment">// 捕获正整数 x 的值</span>
+<span class="function"><span class="keyword">function</span> <span class="title">getX</span>(<span class="params">str</span>) </span>{
+  <span class="keyword">var</span> reg = <span class="regexp">/(?:x=)(\d+)/</span>;
+  <span class="keyword">var</span> arr = str.match(reg);
+  <span class="keyword">return</span> arr &amp;&amp; arr[<span class="number">1</span>] ? arr[<span class="number">1</span>] : arr;
+}
+getX(<span class="string">'beep x=123123 boop'</span>);
+
+<span class="comment">/* console arr */</span>
+<span class="comment">// 0: "x=123123"</span>
+<span class="comment">// 1: "123123"</span>
+<span class="comment">// index: 5</span>
+<span class="comment">// input: "beep x=123123 boop"</span>
+<span class="comment">// length: 2</span>
+</code></pre><p>正则对象的方法：</p>
+<ul>
+<li>test 如果正则表达式与指定的字符串匹配返回 true，否则返回 false</li>
+<li>exec 返回一个数组，其中存放匹配的结果。如果未找到匹配，则返回 null。</li>
+</ul>
+<h2 id="匹配">匹配</h2><p>基于量词（如?, +, *, {m,n}, {m,}）的字符重复次数匹配是正则表达式优于普通字符串处理方法的一个重要方面，也是正则表达式的一个重要组成部分。正则匹配方式有两种：</p>
+<ul>
+<li><strong>贪婪模式</strong> 匹配优先量词，包括：?, +, *, {m,n}，但是不包括{m}</li>
+<li><strong>非贪婪模式</strong> 忽略优先量词，包括：??, +?, *?, {m,n}?</li>
+</ul>
+<p>匹配优先量词修饰的子表达式使用的是就是贪婪模式（非惰性匹配）;忽略优先量词修饰的子表达式使用的就是模式就是非贪婪模式（惰性匹配）。  </p>
+<p>下面使用字符串”abc”来匹配两种正则表达式：</p>
+<p>1.贪婪模式：.*  </p>
+<pre><code>"         .*          "
+<span class="header">|         |           |
+-----------------------</span>
+"   | -&gt;  |  -&gt; |  -&gt; "
+|   a     b     c     |
+<span class="header">|   |     |     |  &lt;- |
+-----------------------</span>
+</code></pre><p>首先将控制权交给“””，由它来匹配第一个字符”匹配成功，将控制权转交给“.<em>”，<br>这时候控制权掌握在了“.</em>”的手上，由于“<em>”是优先词量，在可匹配与不可匹配的情况下，优先尝试匹配，他就会尝试匹配第一字符“a”，<br>匹配成功就会继续往下匹配，匹配第二字符“b”，<br>匹配成功，继续向右匹配，直到匹配到结尾的“””，<br>匹配成功，再向后匹配时发现已经到结尾了，<br>“.</em>”结束匹配将控制权转交给“””，<br>“””发现已经到了源字符串的结尾，看有没有可供回溯的状态，将控制权给了“.<em>”，<br>“.</em>”还回一个字符“c”，然后将控制权转交给“””，来匹配后面的字符“””，匹配成功正则表达式结束。<br>这句表达式匹配过程中只进行了一次回溯。</p>
+<p>2.非贪婪模式：.*?</p>
+<pre><code><span class="string">"          .*?        "</span>
+|<span class="string">          </span>|<span class="string">          </span>|
+-----------------------
+<span class="string">"   -&gt;| -&gt; | -&gt; |     "</span>
+|<span class="string">   &lt;-</span>|<span class="string"> &lt;- </span>|<span class="string"> &lt;- </span>|<span class="string">     </span>|
+|<span class="string">     a    b    c     </span>|
+0     1    2    3     4
+-----------------------
+</code></pre><p>首先由第一个“””取得控制权，匹配位置0位的“””，匹配成功，控制权交给“.<em>?”。<br>“.</em>?”取得控制权后，由于“<em>?”是忽略优先量词，在可匹配可不匹配的情况下，优先尝试不匹配，由于“</em>”等价于“{0,}”，所以在忽略优先的情况下，可以不匹配任何内容。<br>从位置1处尝试忽略匹配，也就是不匹配任何内容，将控制权交给正则表达式最后的“””。 “””取得控制权后，从位置1处尝试匹配，由“””匹配位置1处的“a”，匹配失败，向前查找可供回溯的状态，控制权交给“.<em>?”，<br>由“.</em>?”吃进一个字符，匹配位置1处的“a”，再把控制权交给正则表达式最后的“””。<br>“””取得控制权后，从位置2处尝试匹配，由“””匹配位置1处的“a”，匹配失败，向前查找可供回溯的状态，重复以上过程，直到由“.*?”匹配到“c”为止，再把控制权交给正则表达式最后的“””。<br>“””取得控制权后，从位置4处尝试匹配，由“””匹配字符串最后的“””，匹配成功。<br>这句表达式匹配过程中进行了三次回溯。</p>
+<p>贪婪模式与非贪婪模式影响的是被量词修饰的子表达式的匹配行为，贪婪模式在整个表达式匹配成功的前提下，尽可能多的匹配；非贪婪模式在整个表达式匹配成功的前提下，尽可能少的匹配。从匹配效率上来看，能达到相同匹配结果时，贪婪模式的匹配效率通常会比较高，因为它回溯过程会比较少。</p>
+<h2 id="总结">总结</h2><p>分析正则表达式可以从结构和操作符两方面入手：结构有字符字面量、字符组、量词、锚字符、分组、选择分支、反向引用；操作符像是转义符 \ ，括号和方括号 (…)、[…]，量词限定符 {m}、{m,n}、{m,}、?、*、+ ，和管道符 | 等等。操作符的优先级是从上到下，由高到低，在分析正则的时候可以根据优先级来拆分正则。</p>
+<p>常见的正则表达式：  </p>
+<p>匹配一个URL：</p>
+<pre><code><span class="string">[a-zA-Z]</span>+://<span class="string">[\S]</span>+
+</code></pre><p>匹配特定协议的网络地址，如http或http：</p>
+<pre><code>(https?:<span class="comment">//)?[\S]+</span>
+</code></pre><p>匹配一个IP地址：</p>
+<pre><code><span class="list">(<span class="list">(<span class="list">(<span class="keyword">?:</span><span class="collection">[<span class="number">1</span><span class="number">-9</span>]</span>\d?)</span>|<span class="list">(<span class="keyword">?:1</span>\d<span class="collection">{<span class="number">2</span>}</span>)</span>|<span class="list">(<span class="keyword">?:2</span><span class="collection">[<span class="number">0</span><span class="number">-4</span>]</span>\d)</span>|<span class="list">(<span class="keyword">?:25</span><span class="collection">[<span class="number">0</span><span class="number">-5</span>]</span>)</span>)</span><span class="collection">[.]</span>)</span><span class="collection">{<span class="number">3</span>}</span><span class="list">(<span class="list">(<span class="keyword">?:</span><span class="collection">[<span class="number">1</span><span class="number">-9</span>]</span>\d?)</span>|<span class="list">(<span class="keyword">?:1</span>\d<span class="collection">{<span class="number">2</span>}</span>)</span>|<span class="list">(<span class="keyword">?:2</span><span class="collection">[<span class="number">0</span><span class="number">-4</span>]</span>\d)</span>|<span class="list">(<span class="keyword">?:25</span><span class="collection">[<span class="number">0</span><span class="number">-5</span>]</span>)</span>)</span>
+</code></pre><p>匹配一个邮箱地址：</p>
+<pre><code>[^\s@]+<span class="annotation">@[^\s@]</span>+\.[^\s@]+
+</code></pre><p>匹配密码是否合法：</p>
+<pre><code><span class="comment">// 要求必须同时包含且只能包含数字、大小字母、小写字母和标点符号：</span>
+<span class="comment">(?=^[\d\Wa-zA-Z]{6,8}$)</span><span class="comment">(?=.*\d)</span><span class="comment">(?=.*[a-z])</span><span class="comment">(?=.*[A-Z])</span><span class="comment">(?=.*\W+)</span>
+</code></pre><p>匹配大陆身份证号码（15位或18位）：</p>
+<pre><code>\d{<span class="number">15</span>}|(\d{<span class="number">18</span>}|(\d{<span class="number">17</span>}[Xx]))
+</code></pre><p>匹配日期（年-月-日）：</p>
+<pre><code>(\d{2}|\d{4})-((0?[<span class="link_label">1-9</span>])|(1[<span class="link_label">0-2</span>]))-((0?[<span class="link_label">1-9</span>])|([<span class="link_label">12</span>][<span class="link_reference">0-9</span>])|(3[01]))
+</code></pre><p>24小时制时间（小时:分钟:秒）：</p>
+<pre><code>(((0?|1)[<span class="link_label">0-9</span>])|(2[<span class="link_label">0-3</span>])):([<span class="link_label">0-5</span>][<span class="link_reference">0-9</span>]):([<span class="link_label">0-5</span>][<span class="link_reference">0-9</span>])
+</code></pre>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/03/08/webpack config/" itemprop="url">
                   Webpack Loader and Plugin
                 </a>
@@ -1557,121 +1738,6 @@ $scope.getWifiList = <span class="function"><span class="keyword">function</span
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/16/src error/" itemprop="url">
-                  图片的404处理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-03-16T00:00:00+08:00" content="2016-03-16">
-              2016-03-16
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/16/src error/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/16/src error/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>做网站时最常遇到的问题之一，先说说jq的做法。<br>在标签上绑定onerror事件：</p>
-<h4 id="HTML:">HTML:</h4><pre><code>&lt;<span class="tag">img</span> src=<span class="string">"exist.png"</span> onerror=<span class="string">"errorSrc(this) "</span>/&gt; 
-</code></pre><p>再写个方法把加载失败的图片替换成404图片：</p>
-<h4 id="JQ:">JQ:</h4><pre><code><span class="function"><span class="keyword">function</span> <span class="title">errorSrc</span>(<span class="params">img</span>)</span>{ 
-    $(img).attr(<span class="string">"src"</span>, <span class="string">"img/404.png"</span>);
-}
-</code></pre><p>就大功告成了！但是要注意的是要把errorSrc放在html的head里提前加载，要不然网页载入时即使图片出错也可能还没读取到errorSrc处理函数。而且浏览器的控制窗其实还是会报get的错。</p>
-<p>如果在angular的框架下就更方便了，angular自带一个ngSrc指令，我们可以利用这个指令，自己写个angular指令，如下：</p>
-<h4 id="ngJS:">ngJS:</h4><pre><code>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
-<span class="pi">    'use strict'</span>;
-    <span class="comment">//加载指令</span>
-    angular.module(<span class="string">'app'</span>)
-        .directive(<span class="string">'errSrc'</span>, [
-            <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
-                <span class="keyword">return</span> {
-                    link: <span class="function"><span class="keyword">function</span>(<span class="params">scope, element, attrs</span>) </span>{
-                          element.bind(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
-                            <span class="keyword">if</span> (attrs.src != attrs.errSrc) {
-                                  attrs.$set(<span class="string">'src'</span>, attrs.errSrc);
-                            }
-                          });
-                    }
-                }
-            }
-        ])
-}());
-</code></pre><h4 id="ngHTML:">ngHTML:</h4><pre><code>&lt;<span class="tag">img</span> ng-src=<span class="string">""</span> err-src=<span class="string">"img/404.jpg"</span>/&gt;
-</code></pre><p>于是，angular在每次编译网页的时候，就会把已经不存在的图片换成了指定的img/404.jpg，而且这么浏览器控制窗也没有任何错误警告（强迫症福音www）。</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1718,7 +1784,7 @@ $scope.getWifiList = <span class="function"><span class="keyword">function</span
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
