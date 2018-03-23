@@ -209,6 +209,194 @@
             
               
                 
+                <a class="post-title-link" href="/2018/03/23/web performance/" itemprop="url">
+                  前端优化
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2018-03-23T00:00:00+08:00" content="2018-03-23">
+              2018-03-23
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/03/23/web performance/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/23/web performance/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>影响用户浏览网页的速度主要有以下几条因素：</p>
+<ul>
+<li>用户网速</li>
+<li>服务器所在线路</li>
+<li>DNS解析</li>
+<li>服务器负载</li>
+<li>服务器端运行速度</li>
+<li>前端页面加载</li>
+</ul>
+<p>优化前端可以直观地影响用户体验，同时也是成本较低的优化方式。  </p>
+<p>前端的优化可以从两方面入手：  </p>
+<ul>
+<li>加载优化</li>
+<li>渲染优化</li>
+</ul>
+<h2 id="前端优化辅助工具">前端优化辅助工具</h2><p>我们可以借助Google官方的PageSpeed Tools来分析页面加载速度，这个检测工具有在线版本，也有Chrome和Firefox扩展：<a href="https://developers.google.com/speed/pagespeed/" target="_blank" rel="external">PageSpeed Insights</a>。</p>
+<p><img src="http://7xowup.com1.z0.glb.clouddn.com/web-perform-1.png" alt="PageSpeed Insights phone"></p>
+<p><img src="http://7xowup.com1.z0.glb.clouddn.com/web-perform-2.png" alt="PageSpeed Insights web"></p>
+<p>如果使用<a href="https://developers.google.com/web/tools/lighthouse/?hl=zh-cn" target="_blank" rel="external">Lighthouse</a>进行分析，会生成更加全面和详细的报告：</p>
+<p><img src="https://developers.google.cn/web/fundamentals/performance/why-performance-matters/images/lighthouse-2x.png" alt="lighthouse"></p>
+<p>Lighthouse除了可以安装扩展外，还可以通过npm安装在本地，通过命令行调用：</p>
+<pre><code>npm install -<span class="keyword">g</span> lighthouse
+
+<span class="comment">// 使用lighthouse</span>
+lighthouse --<span class="keyword">view</span> http:<span class="comment">//...</span>
+</code></pre><h2 id="前端优化原则">前端优化原则</h2><p>Yslow-23条规则如下：</p>
+<h4 id="减少HTTP请求数">减少HTTP请求数</h4><ul>
+<li>合并CSS</li>
+<li>合并JS</li>
+<li>CSS Sprites</li>
+</ul>
+<h4 id="使用CDN">使用CDN</h4><ul>
+<li>优点：提高用户访问速度</li>
+<li>缺点：只适合静态内容，内容的改变无法立刻同步到所有服务器上</li>
+</ul>
+<h4 id="避免过多DNS">避免过多DNS</h4><p>一旦用户的浏览器和用户的计算机DNS缓存都没有记录请求的地址，则浏览器就要进行一次远程的DNS解析。</p>
+<p>影响用户每次浏览DNS查找数量的因素主要有：</p>
+<ol>
+<li>操作系统DNS 缓存的时间</li>
+<li>浏览器缓存的时间和数量</li>
+<li>发布到DNS服务器的TTL时间</li>
+<li>同一个页面请求的不同域名的数量</li>
+<li>Keep-Alive时间</li>
+</ol>
+<p>前端无法控制前三条因素；<br>第4条，前端应该尽量减少域名的数量，但是增加不同的域名也可以提高并行下载的速度，需要根据实际业务衡量权重；<br>第5条，Keep-Alive可以使我们减少请求tcp-ip的时间，同时不需要DNS解析，但是会额外增加服务器的负担。</p>
+<h4 id="避免无效的链接">避免无效的链接</h4><p>检查链接地址是否有效</p>
+<h4 id="HTTP请求头使用Expires和Cache-Control">HTTP请求头使用Expires和Cache-Control</h4><ul>
+<li>Last-Modified：在浏览器第一次请求某一个URL时，服务器端的返回状态会是200，内容是客户端请求的资源，同时有一个Last-Modified的属性标记此文件在服务器端最后被修改的时间。</li>
+<li><p>If-Modified-Since：客户端第二次请求此URL时，浏览器会向服务器传送If-Modified-Since报头，询问该时间之后文件是否有被修改过，如果服务器端的资源没有变化，则自动返回 HTTP 304，内容为空，节省了传输数据量。</p>
+</li>
+<li><p>Expires：声明资源不再被浏览器缓存的时间，一旦超过了这个时间，浏览器都应该重新发送请求给服务器。</p>
+</li>
+<li><p>Cache-Control: 如果指定cache-control的值为private、no-cache、must-revalidate，那么打开新窗口访问时都会重新访问服务器。而如果指定了max-age值，那么在此值内的时间里就不会重新访问服务器。</p>
+</li>
+<li><p>Etag: 比Last-Modified更保险，在缓存没有过期的情况下，根据If-None-Match判断该请求自上次客户端请求之后是否有修改，若未被修改则返回响应304（Not Modified）和一个空的响应头。  </p>
+</li>
+</ul>
+<h4 id="HTTP请求头使用Etag">HTTP请求头使用Etag</h4><blockquote>
+<p>Etag响应头部字段值是一个实体标记，它提供一个 “不透明” 的缓存验证器。这可能在以下几种情况下提供更可靠的验证：不方便存储修改日期；HTTP 日期值的 one-second 解决方案不够用；或者原始服务器希望避免由于使用修改日期而导致的某些冲突。</p>
+</blockquote>
+<p><strong>请求流程</strong>  </p>
+<p>Etag由服务器端生成，客户端通过If-Match或者说If-None-Match这个条件判断请求来验证资源是否修改。</p>
+<p>请求一个文件的流程可能如下：</p>
+<p>—– 第一次请求 —–</p>
+<ol>
+<li>客户端发起 HTTP GET 请求；  </li>
+<li>服务器处理请求，返回文件内容和Header，包括Etag：2e681a65d044840，状态码200。</li>
+</ol>
+<p>—– 第二次请求 —–  </p>
+<ol>
+<li>客户端发起 HTTP GET 请求，同时发送一个If-None-Match：2e681a65d044840，也就是第一次请求得到的Etag值；</li>
+<li>服务器比较客户端的If-None-Match和服务器的Etag，若一致则返回空内容，状态码304；</li>
+<li>客户端继续使用本地缓存，状态码200。</li>
+</ol>
+<p>Etag 主要为了解决 Last-Modified 无法解决的一些问题： </p>
+<ul>
+<li>一些文件也许会周期性的更改，但是他的内容并不改变，仅仅改变的修改时间，这个时候我们并不希望客户端认为这个文件被修改了而重新请求；</li>
+<li>某些文件修改非常频繁，比如在秒以下的时间内进行修改，而UNIX记录MTIME只能精确到秒；</li>
+<li>某些服务器不能精确得到文件的最后修改时间；</li>
+<li>……</li>
+</ul>
+<p>Etag 仅仅是一个和文件相关的实体值标记，可以是一个版本标记，比如v1.0.0也是合法的。</p>
+<h5 id="避免重定向。">避免重定向。</h5><p>同域：注意避免反斜杠 “/” 的跳转；<br>跨域：使用Alias或者mod_rewirte建立CNAME（保存域名与域名之间关系的DNS记录）。</p>
+<h4 id="压缩">压缩</h4><ul>
+<li><p>压缩内容： 一般的HTML 、CSS、JS文件都应该采用Gzip进行压缩，而图片和PDF文档不应该被压缩，因为他们已经被本地压缩过，在进行压缩不会获得效果，而且会增加服务器的压力。</p>
+</li>
+<li><p>压缩效果<br>Gzip是一个免费的压缩方法，快速而有效，通常能减少70%的文件大小，并被几乎所有的浏览器所支持。</p>
+</li>
+</ul>
+<h4 id="样式文件尽量放在页面头部">样式文件尽量放在页面头部</h4><p>首屏加载最直观的表现在于页面样式。</p>
+<h4 id="脚本文件尽量放在页面底部">脚本文件尽量放在页面底部</h4><p>防止脚本加载对之后资源造成阻塞。</p>
+<h4 id="尽量不使用CSS表达式">尽量不使用CSS表达式</h4><h4 id="避免过多的内联JS和CSS">避免过多的内联JS和CSS</h4><ul>
+<li>内联优势：可以减少HTTP请求数，可能会导致第一次请求所需时间过长；</li>
+<li>外置优势：可以使用CDN静态缓存，可以被浏览器缓存，组件重用率提高。</li>
+</ul>
+<p>这条规则与第一条，减少HTTP请求是互相矛盾的，所以需要均衡，衡量的标准主要是重用率和访问页面的次数。如果网站的页面一个用户只会浏览几次，或者页面中的CSS、JS相对独立，适合选择内联。一般来讲，外置都会获得更好的性能，还可以采用动态内联和加载后下载的方式，用cookie记录用户是否有缓存，如果没有，则在用户页面显示完毕之后，采用JS的方式动态加载，但是需要放置CSS冲突和JS冲突。</p>
+<h4 id="删除重复的JS和CSS">删除重复的JS和CSS</h4><p>重复调用脚本，除了增加额外的HTTP请求外，多次运算也会浪费时间。</p>
+<h4 id="压缩JavaScript和CSS文件">压缩JavaScript和CSS文件</h4><h4 id="AJAX请求缓存">AJAX请求缓存</h4><p>“异步”并不意味着“即时”，AJAX 并不能保证用户不会在等待异步的JavaScript和XML响应上花费时间。</p>
+<h4 id="使用GET来完成AJAX请求">使用GET来完成AJAX请求</h4><p>当使用 XMLHttpRequest 时，浏览器中的 POST 方法是一个“两步走”的过程：首先发送文件头，然后才发送数据。因此使用GET获取数据和进行缓存策略则更有意义。</p>
+<h4 id="减少DOM渲染节点">减少DOM渲染节点</h4><h4 id="图片尺寸不要作伸缩">图片尺寸不要作伸缩</h4><h4 id="尽量减小Cookie的体积">尽量减小Cookie的体积</h4><h4 id="不要使用滤镜">不要使用滤镜</h4><h4 id="不同域名下的Cookie彼此独立">不同域名下的Cookie彼此独立</h4><p>不同域名下的Cookie不要都设在根域名下，会增加请求头的大小。Yahoo! 的静态文件都在主域名以外，客户端请求静态文件的时候，减少了 Cookie 的反复传输对主域名的影响。</p>
+<h4 id="避免404">避免404</h4><p>有些站点把404错误响应页面改为“你是不是要找……”，这虽然改进了用户体验但是同样也会浪费服务器资源（如数据库等）。最糟糕的情况是指向外部 JavaScript的链接出现问题并返回404代码。首先，这种加载会破坏并行加载；其次浏览器会把试图在返回的404响应内容中找到可能有用的部分当作JavaScript代码来执行。</p>
+<h4 id="缩小favicon-ico并缓存">缩小favicon.ico并缓存</h4>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/03/17/regx/" itemprop="url">
                   正则表达式总结
                 </a>
@@ -1616,128 +1804,6 @@ document.addEventListener(<span class="string">"deviceready"</span>, <span class
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/31/ng plugin/" itemprop="url">
-                  Ionic HybridApp 定位与wifi插件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-07-31T00:00:00+08:00" content="2016-07-31">
-              2016-07-31
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/31/ng plugin/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/31/ng plugin/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>ngCordova虽然提供了大部分HybridApp开发常用的插件，不过有些还是挺鸡肋的，比如定位插件$cordovaGeolocation，调试半天不是返回空就是连接超时，转而用HTML5的Geolocation调试才发现，原来用的是google的服务……毕竟在大天朝开发自带翻墙能力的app不太现实，于是转而求助github上的资源。</p>
-<p>最后我选用的定位插件是：</p>
-<ul>
-<li><a href="https://github.com/DoubleSpout/phonegap_baidu_sdk_location" target="_blank" rel="external">Phonegap Baidu Location Plugin</a></li>
-</ul>
-<p>wifi插件则是：</p>
-<ul>
-<li><a href="https://github.com/makeroo/WifiWizard" target="_blank" rel="external">WifiWizard</a></li>
-</ul>
-<p>定位插件暂时只提供了安卓的接口，调用的是百度的服务，所以不必担心在天朝的使用问题，wifi插件则是兼容了ios和安卓，我暂时不考虑ios开发，先做好安卓的功能性开发。<br>两者都挂在了window下，在github下载后执行ionic plugin install，可以直接调用：</p>
-<pre><code><span class="comment">//获取用户此时所在经纬度</span>
-$scope.getCurrentPosition = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
-    <span class="built_in">document</span>.addEventListener(<span class="string">"deviceready"</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
-        <span class="keyword">var</span> noop = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{};
-        <span class="built_in">window</span>.locationService.getCurrentPosition(<span class="function"><span class="keyword">function</span>(<span class="params">pos</span>) </span>{
-            $scope.nowPoint = {
-                lng: pos.coords.longitude,
-                lat: pos.coords.latitude
-            };
-            <span class="built_in">window</span>.locationService.stop(noop,noop);
-        }, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>{
-            toastr.error(e.message);
-            <span class="built_in">window</span>.locationService.stop(noop,noop);
-        });
-    }, <span class="literal">false</span>);
-};
-
-<span class="comment">//获取wifi列表</span>
-$scope.getWifiList = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
-    <span class="built_in">document</span>.addEventListener(<span class="string">"deviceready"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
-        <span class="built_in">window</span>.WifiWizard.listNetworks(<span class="function"><span class="keyword">function</span>(<span class="params">list</span>) </span>{
-            $scope.wifiList = list;
-        }, <span class="literal">false</span>);
-    }, <span class="literal">false</span>);
-}
-</code></pre>
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1784,7 +1850,7 @@ $scope.getWifiList = <span class="function"><span class="keyword">function</span
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1798,7 +1864,7 @@ $scope.getWifiList = <span class="function"><span class="keyword">function</span
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
