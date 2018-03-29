@@ -1,0 +1,920 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript,Webpack," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="事件流webpack 所有的功能都以 plugin 的方式集成在构建流程中，流程都是通过事件来控制的，每一个 plugin 就相当于event listener，apply 方法就相当于 emitter，在打包流程中调用相应的 apply 方法来触发 plugin。
+在编写一个 plugin 前，需要了解 webpack 的事件流，根据功能选择合适的监听事件。
+webpack 的事件流如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="写一个Webpack Plugin需要了解的关键点">
+<meta property="og:url" content="http://eatingmiao.github.io/2018/03/29/compiler/index.html">
+<meta property="og:site_name" content="Eating's Notes">
+<meta property="og:description" content="事件流webpack 所有的功能都以 plugin 的方式集成在构建流程中，流程都是通过事件来控制的，每一个 plugin 就相当于event listener，apply 方法就相当于 emitter，在打包流程中调用相应的 apply 方法来触发 plugin。
+在编写一个 plugin 前，需要了解 webpack 的事件流，根据功能选择合适的监听事件。
+webpack 的事件流如下：">
+<meta property="og:updated_time" content="2018-03-29T13:39:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="写一个Webpack Plugin需要了解的关键点">
+<meta name="twitter:description" content="事件流webpack 所有的功能都以 plugin 的方式集成在构建流程中，流程都是通过事件来控制的，每一个 plugin 就相当于event listener，apply 方法就相当于 emitter，在打包流程中调用相应的 apply 方法来触发 plugin。
+在编写一个 plugin 前，需要了解 webpack 的事件流，根据功能选择合适的监听事件。
+webpack 的事件流如下：">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> 写一个Webpack Plugin需要了解的关键点 | Eating's Notes </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Eating's Notes</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                写一个Webpack Plugin需要了解的关键点
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2018-03-29T00:00:00+08:00" content="2018-03-29">
+              2018-03-29
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/03/29/compiler/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/29/compiler/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="事件流">事件流</h2><p>webpack 所有的功能都以 plugin 的方式集成在构建流程中，流程都是通过事件来控制的，每一个 plugin 就相当于event listener，apply 方法就相当于 emitter，在打包流程中调用相应的 apply 方法来触发 plugin。</p>
+<p>在编写一个 plugin 前，需要了解 webpack 的事件流，根据功能选择合适的监听事件。</p>
+<p>webpack 的事件流如下：</p>
+<pre><code>         method                       event-name
+------------------------------------------------------------------
+applyPluginsBailResult           <span class="string">|   entry-option</span>
+applyPlugins                     <span class="string">|   after-plugins</span>
+applyPlugins                     <span class="string">|   after-resolvers</span>
+applyPlugins                     <span class="string">|   environment</span>
+applyPlugins                     <span class="string">|   after-environment</span>
+applyPluginsAsync                <span class="string">|   before-run</span>
+applyPluginsAsyncSeries          <span class="string">|   run</span>
+applyPlugins                     <span class="string">|   normal-module-factory</span>
+applyPlugins                     <span class="string">|   context-module-factory</span>
+applyPlugins                     <span class="string">|   compile</span>
+applyPlugins                     <span class="string">|   this-compilation</span>
+applyPlugins                     <span class="string">|   compilation</span>
+applyPluginsParallel             <span class="string">|   make</span>
+applyPluginsAsyncWaterfall       <span class="string">|   before-resolve</span>
+applyPluginsWaterfall            <span class="string">|   factory</span>
+applyPluginsWaterfall            <span class="string">|   resolver</span>
+applyPlugins                     <span class="string">|   resolve</span>
+applyPlugins                     <span class="string">|   resolve-step</span>
+applyPluginsParallelBailResult   <span class="string">|   file</span>
+applyPluginsParallelBailResult   <span class="string">|   directory</span>
+applyPlugins                     <span class="string">|   resolve-step</span>
+applyPluginsParallelBailResult   <span class="string">|   result</span>
+applyPluginsAsyncWaterfall       <span class="string">|   after-resolve</span>
+applyPluginsBailResult           <span class="string">|   create-module</span>
+applyPluginsWaterfall            <span class="string">|   module</span>
+applyPlugins                     <span class="string">|   build-module</span>
+applyPlugins                     <span class="string">|   normal-module-loader</span>
+applyPluginsBailResult           <span class="string">|   program</span>
+applyPluginsBailResult           <span class="string">|   statement</span>
+applyPluginsBailResult           <span class="string">|   evaluate MemberExpression</span>
+applyPluginsBailResult           <span class="string">|   evaluate Identifier document.write</span>
+applyPluginsBailResult           <span class="string">|   call document.write</span>
+applyPluginsBailResult           <span class="string">|   expression document.write</span>
+applyPluginsBailResult           <span class="string">|   expression document</span>
+applyPlugins                     <span class="string">|   succeed-module</span>
+applyPlugins                     <span class="string">|   seal</span>
+applyPlugins                     <span class="string">|   optimize</span>
+applyPlugins                     <span class="string">|   optimize-modules</span>
+applyPlugins                     <span class="string">|   after-optimize-modules</span>
+applyPlugins                     <span class="string">|   optimize-chunks</span>
+applyPlugins                     <span class="string">|   after-optimize-chunks</span>
+applyPluginsAsyncSeries          <span class="string">|   optimize-tree</span>
+applyPlugins                     <span class="string">|   after-optimize-tree</span>
+applyPluginsBailResult           <span class="string">|   should-record</span>
+applyPlugins                     <span class="string">|   revive-modules</span>
+applyPlugins                     <span class="string">|   optimize-module-order</span>
+applyPlugins                     <span class="string">|   before-module-ids</span>
+applyPlugins                     <span class="string">|   optimize-module-ids</span>
+applyPlugins                     <span class="string">|   after-optimize-module-ids</span>
+applyPlugins                     <span class="string">|   record-modules</span>
+applyPlugins                     <span class="string">|   revive-chunks</span>
+applyPlugins                     <span class="string">|   optimize-chunk-order</span>
+applyPlugins                     <span class="string">|   before-chunk-ids</span>
+applyPlugins                     <span class="string">|   optimize-chunk-ids</span>
+applyPlugins                     <span class="string">|   after-optimize-chunk-ids</span>
+applyPlugins                     <span class="string">|   record-chunks</span>
+applyPlugins                     <span class="string">|   before-hash</span>
+applyPlugins                     <span class="string">|   hash</span>
+applyPlugins                     <span class="string">|   hash-for-chunk</span>
+applyPlugins                     <span class="string">|   chunk-hash</span>
+applyPlugins                     <span class="string">|   after-hash</span>
+applyPlugins                     <span class="string">|   before-chunk-assets</span>
+applyPluginsWaterfall            <span class="string">|   global-hash-paths</span>
+applyPluginsBailResult           <span class="string">|   global-hash</span>
+applyPluginsWaterfall            <span class="string">|   bootstrap</span>
+applyPluginsWaterfall            <span class="string">|   local-vars</span>
+applyPluginsWaterfall            <span class="string">|   require</span>
+applyPluginsWaterfall            <span class="string">|   module-obj</span>
+applyPluginsWaterfall            <span class="string">|   module-require</span>
+applyPluginsWaterfall            <span class="string">|   require-extensions</span>
+applyPluginsWaterfall            <span class="string">|   asset-path</span>
+applyPluginsWaterfall            <span class="string">|   startup</span>
+applyPluginsWaterfall            <span class="string">|   module-require</span>
+applyPluginsWaterfall            <span class="string">|   render</span>
+applyPluginsWaterfall            <span class="string">|   module</span>
+applyPluginsWaterfall            <span class="string">|   render</span>
+applyPluginsWaterfall            <span class="string">|   package</span>
+applyPluginsWaterfall            <span class="string">|   modules</span>
+applyPluginsWaterfall            <span class="string">|   render-with-entry</span>
+applyPluginsWaterfall            <span class="string">|   asset-path</span>
+applyPlugins                     <span class="string">|   chunk-asset</span>
+applyPlugins                     <span class="string">|   additional-chunk-assets</span>
+applyPlugins                     <span class="string">|   record</span>
+applyPluginsAsyncSeries          <span class="string">|   additional-assets</span>
+applyPluginsAsyncSeries          <span class="string">|   optimize-chunk-assets</span>
+applyPlugins                     <span class="string">|   after-optimize-chunk-assets</span>
+applyPluginsAsyncSeries          <span class="string">|   optimize-assets</span>
+applyPlugins                     <span class="string">|   after-optimize-assets</span>
+applyPluginsAsyncSeries          <span class="string">|   after-compile</span>
+applyPluginsBailResult           <span class="string">|   should-emit</span>
+applyPluginsAsyncSeries          <span class="string">|   emit</span>
+applyPluginsWaterfall            <span class="string">|   asset-path</span>
+applyPluginsAsyncSeries          <span class="string">|   after-emit</span>
+applyPlugins                     <span class="string">|   done</span>
+</code></pre><h3 id="关键事件">关键事件</h3><ul>
+<li>entry-option 初始化 option</li>
+<li>run 编译入口</li>
+<li>compile 开始编译</li>
+<li>make 从 entry 递归分析模块及其依赖的模块，创建这些模块对象</li>
+<li>build-module 构建模块，使用对应的loader加载</li>
+<li>normal-module-loader 对loader加载完成的模块进行编译，生成AST</li>
+<li>program 对AST进行遍历，收集依赖</li>
+<li>seal 封装构建结果，抽取公共模块，优化 chunk</li>
+<li>bootstrap 生成启动代码</li>
+<li>after-compile 完成构建</li>
+<li>emit 把各个 chunk 输出到结果文件</li>
+<li>after-emit 完成输出 chunk</li>
+</ul>
+<h3 id="关键实体">关键实体</h3><ul>
+<li>Module 模块是 webpack 的中的核心实体，使用 ModuleFactory 创建不同的Module</li>
+<li>Dependency 每一个依赖的实体都包含一个指向被依赖的 Module 的字段</li>
+<li>Template 每一个依赖都有相应的 Template，用来生成加载该依赖模块的js代码</li>
+<li>Chunk 代码分离后的产物，按需加载的分块，装载了不同的 module</li>
+</ul>
+<p>要开发一个 webpack 的 plugin，其中最关键的两个对象就是 <a href="https://github.com/webpack/webpack/blob/master/lib/Compiler.js" target="_blank" rel="external">compiler</a> 和 <a href="https://github.com/webpack/webpack/blob/master/lib/Compilation.js" target="_blank" rel="external">compilation</a>。</p>
+<h2 id="Compiler">Compiler</h2><blockquote>
+<p>The compiler object represents the fully configured webpack environment. This object is built once upon starting webpack, and is configured with all operational settings including options, loaders, and plugins. When applying a plugin to the webpack environment, the plugin will receive a reference to this compiler. Use the compiler to access the main webpack environment</p>
+</blockquote>
+<p>Compiler 即编译器，用于配置和建立完整的 webpack 环境。启动 webpack 时，只会创建一次 compiler ，并配置所有的操作设置，包括选项、加载器和插件。在 webpack 环境中，compiler 会作为一个参数引入插件。通过 compiler 可以访问 webpack 的基本环境。</p>
+<p>Compiler 继承自 Tapable，使得 webpack 实例具备注册和调用 plugin 的功能。</p>
+<p>Webpack 在调用 plugin 时，首先创建子 compiler 来委派特定的任务:</p>
+<pre><code>function webpack(options, callback) {
+    <span class="keyword">let</span> compiler;
+      <span class="keyword">if</span>(<span class="built_in">Array</span><span class="built_in">.</span>isArray(options)) {
+        compiler = <span class="literal">new</span> MultiCompiler(options<span class="built_in">.</span><span class="built_in">map</span>(options =&gt; webpack(options)));
+   } <span class="keyword">else</span> <span class="keyword">if</span>(typeof options === <span class="string">"object"</span>) {
+           <span class="attribute">...</span>
+           compiler = <span class="literal">new</span> Compiler();
+           <span class="attribute">...</span>
+      } <span class="keyword">else</span> {
+          <span class="attribute">...</span>
+      }
+      <span class="attribute">...</span>
+      <span class="keyword">return</span> compiler;
+}
+</code></pre><p>Webpack 的实际入口是 Compiler 类的 run 方法， 在 run 方法里调用 compile 方法开始编译。在编译的时候会使用一个核心对象：Compilation。</p>
+<h2 id="Compilation">Compilation</h2><blockquote>
+<p>A compilation object represents a single build of versioned assets. While running webpack development middleware, a new compilation will be created each time a file change is detected, thus generating a new set of compiled assets. A compilation surfaces information about the present state of module resources, compiled assets, changed files, and watched dependencies. The compilation also provides many callback points at which a plugin may choose to perform custom actions.</p>
+</blockquote>
+<p>Compilation 对象是每次进行资源构建的一个版本。每当检测到一个文件变化，一次新的编译将被创建，从而生成一组新的编译资源。该对象负责组织整个编译过程，内部存放着所有 module，chunk，生成的 asset 以及用来生成最后打包文件的 template 的信息。</p>
+<pre><code><span class="comment">// Compiler对象的引用</span>
+<span class="keyword">this</span>.compiler = compiler; 
+
+<span class="comment">//模块解析器      </span>
+<span class="keyword">this</span>.resolvers = compiler.resolvers; 
+...
+
+<span class="comment">// 生成js结果文件的Template</span>
+<span class="keyword">this</span>.mainTemplate = <span class="keyword">new</span> MainTemplate(<span class="keyword">this</span>.outputOptions);
+<span class="keyword">this</span>.chunkTemplate = <span class="keyword">new</span> ChunkTemplate(<span class="keyword">this</span>.outputOptions, <span class="keyword">this</span>.mainTemplate);
+<span class="keyword">this</span>.hotUpdateChunkTemplate = <span class="keyword">new</span> HotUpdateChunkTemplate(<span class="keyword">this</span>.outputOptions);
+<span class="keyword">this</span>.moduleTemplate = <span class="keyword">new</span> ModuleTemplate(<span class="keyword">this</span>.outputOptions);
+<span class="comment">// 入口</span>
+<span class="keyword">this</span>.entries = [];
+<span class="comment">// 预先加载的chunk</span>
+<span class="keyword">this</span>.preparedChunks = [];
+<span class="comment">// 所有的chunk</span>
+<span class="keyword">this</span>.chunks = [];                               
+<span class="keyword">this</span>.namedChunks = {};
+<span class="comment">// 所有module                             </span>
+<span class="keyword">this</span>.modules = [];              
+...
+
+<span class="comment">// 保存所有生成的文件</span>
+<span class="keyword">this</span>.assets = {}; 
+
+<span class="comment">// 保存子Compilation对象，子Compilation对象依赖父级Compilation对象生成的结果</span>
+<span class="keyword">this</span>.children = []; 
+<span class="comment">// 保存Dependency和ModuleFactory的对应关系，方便创建该依赖对应的Module           </span>
+<span class="keyword">this</span>.dependencyFactories = <span class="keyword">new</span> ArrayMap();  
+<span class="keyword">this</span>.dependencyTemplates = <span class="keyword">new</span> ArrayMap();  
+</code></pre><p>plugin 注册了 make 事件的监听，当 Compiler 执行 make 事件流时，调用 Compilation.addEntry 方法，通过 options 对象的 entry 字段找到入口脚本，调用 _addModuleChain 方法根据模块类型通过模块工厂创建和构建 Module：</p>
+<pre><code>_addModuleChain(context, dependency, onModule, callback) {
+    ...
+    <span class="regexp">//</span> 创建模块
+    const moduleFactory = <span class="keyword">this</span>.dependencyFactories.get(dependency.constructor);
+    ...
+    moduleFactory.create(context, dependency, <span class="function"><span class="params">(err, <span class="built_in">module</span>)</span> =&gt;</span> {
+        const result = <span class="keyword">this</span>.addModule(<span class="built_in">module</span>);
+        ...
+
+        <span class="regexp">//</span> 构建模块，使用acorn生成AST，添加依赖模块
+        <span class="keyword">this</span>.buildModule(<span class="built_in">module</span>, <span class="literal">false</span>, <span class="literal">null</span>, <span class="literal">null</span>, <span class="function"><span class="params">(err)</span> =&gt;</span> {
+            ...
+        });
+    });
+};
+</code></pre><p>完成 buildModule 后，程序调用 processModuleDependencies 开始递归处理依赖的 module：</p>
+<pre><code>addModuleDependencies(module, dependencies, bail, cacheGroup, recursive, callback) {
+    <span class="comment">// 根据 dependencies 创建依赖模块对象</span>
+    const factories = [];
+    <span class="keyword">for</span>(let i = <span class="number">0</span>; i &lt; dependencies.length; i++) {
+        const factory = <span class="built_in">_this</span>.dependencyFactories.get(dependencies[i][<span class="number">0</span>].constructor);
+        <span class="keyword">if</span>(!factory) {
+            return callback(new Error(`No module factory available <span class="keyword">for</span> dependency <span class="built_in">type</span>: ${dependencies[i][<span class="number">0</span>].constructor.<span class="built_in">name</span>}`));
+        }
+        factories[i] = [factory, dependencies[i]];
+    }
+    <span class="comment">// 遍历每个依赖模块</span>
+    async.<span class="keyword">forEach</span>(factories, function iteratorFactory(item, callback) {
+        <span class="comment">// 构建模块</span>
+        ...
+    });
+    ...
+}
+</code></pre><p>所有模块构建完成后，开始调用 seal 方法对构建结果进行封装，对每个 module 和 chunk 进行整理，生成编译后的源码，合并，拆分，生成 hash。在封装过程中，webpack 会调用 Compilation 中的 createChunkAssets 方法进行代码生成，通过判断是否为入口文件来选择不同的模板对象进行封装，入口文件会采用 mainTemplate 加载的 render 方法，其余文件则采用异步加载的 chunkTemplate 的 render 方法。</p>
+<pre><code><span class="comment">// 如果是入口，则使用 MainTemplate 生成结果，否则使用 ChunkTemplate</span>
+<span class="keyword">if</span>(chunk.hasRuntime()) {
+    source = <span class="keyword">this</span>.mainTemplate.render(<span class="keyword">this</span>.hash, chunk, <span class="keyword">this</span>.moduleTemplate, <span class="keyword">this</span>.dependencyTemplates);
+} <span class="keyword">else</span> {
+    source = <span class="keyword">this</span>.chunkTemplate.render(chunk, <span class="keyword">this</span>.moduleTemplate, <span class="keyword">this</span>.dependencyTemplates);
+}
+
+<span class="comment">// chunk.hasRuntime</span>
+hasRuntime() {
+    <span class="keyword">if</span>(<span class="keyword">this</span>.entrypoints.length === <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;
+    <span class="keyword">return</span> <span class="keyword">this</span>.entrypoints[<span class="number">0</span>].chunks[<span class="number">0</span>] === <span class="keyword">this</span>;
+}
+</code></pre><h2 id="Template">Template</h2><p>Template是用来生成结果代码的。webpack 中 Template 有四个子类：</p>
+<ul>
+<li>MainTemplate 用于生成项目入口文件</li>
+<li>ChunkTemplate 用于生成异步加载的代码</li>
+<li>ModuleTemplate 用于生成某个模块的代码</li>
+<li>HotUpdateChunkTemplate 用于处理热替换模块</li>
+</ul>
+<p>在 MainTemplate 和 ChunkTemplate 需要根据依赖的模块，逐个调用 ModuleTemplate 的 render 方法：</p>
+<pre><code> <span class="keyword">this</span>.plugin(<span class="string">"require-extensions"</span>, (<span class="keyword">source</span>, chunk, hash) =&gt; {
+     ...
+     <span class="keyword">this</span>.requireFn = <span class="string">"__webpack_require__"</span>;
+ });
+ render(hash, chunk, moduleTemplate, dependencyTemplates) {
+     var buf = [];
+      ...
+     buf.<span class="keyword">push</span>(<span class="string">"function "</span> + <span class="keyword">this</span>.requireFn + <span class="string">"(moduleId) {"</span>);
+     buf.<span class="keyword">push</span>(<span class="keyword">this</span>.indent(<span class="keyword">this</span>.applyPluginsWaterfall(<span class="string">"require"</span>, <span class="string">""</span>, chunk, hash)));
+     buf.<span class="keyword">push</span>(<span class="string">"}"</span>);
+     buf.<span class="keyword">push</span>(<span class="string">""</span>);
+     ...
+};
+</code></pre><p>ModuleTemplate 根据 dependencyTemplates 获取不同的依赖 Template 实例：</p>
+<pre><code>render(<span class="keyword">module</span>, dependencyTemplates, chunk) {
+    <span class="keyword">const</span> moduleSource = <span class="keyword">module</span>.source(dependencyTemplates, <span class="keyword">this</span>.outputOptions, <span class="keyword">this</span>.requestShortener);
+    <span class="keyword">const</span> moduleSourcePostModule = <span class="keyword">this</span>.applyPluginsWaterfall(<span class="string">"module"</span>, moduleSource, <span class="keyword">module</span>, chunk, dependencyTemplates);
+    <span class="keyword">const</span> moduleSourcePostRender = <span class="keyword">this</span>.applyPluginsWaterfall(<span class="string">"render"</span>, moduleSourcePostModule, <span class="keyword">module</span>, chunk, dependencyTemplates);
+    <span class="keyword">return</span> <span class="keyword">this</span>.applyPluginsWaterfall(<span class="string">"package"</span>, moduleSourcePostRender, <span class="keyword">module</span>, chunk, dependencyTemplates);
+};
+</code></pre><p>module.source()方法是生成该模块结果代码的方法。source 是一个抽象方法，在 Module 的不同子类里会重写该方法。在子类 NormalModule 的 source 方法里，会根据依赖的 Templete 把源代码替换成 webpack 的模块加载代码：</p>
+<pre><code>source(dependencyTemplates, runtimeTemplate) {
+    <span class="keyword">const</span> hashDigest = <span class="keyword">this</span>.getHashDigest(dependencyTemplates);
+    <span class="keyword">if</span> (<span class="keyword">this</span>._cachedSourceHash === hashDigest) {
+        <span class="comment">// We can reuse the cached source</span>
+        <span class="keyword">return</span> <span class="keyword">this</span>._cachedSource;
+    }
+
+    <span class="keyword">const</span> source = <span class="keyword">this</span>.generator.generate(
+        <span class="keyword">this</span>,
+        dependencyTemplates,
+        runtimeTemplate
+    );
+
+    <span class="keyword">const</span> cachedSource = <span class="keyword">new</span> CachedSource(source);
+    <span class="keyword">this</span>._cachedSource = cachedSource;
+    <span class="keyword">this</span>._cachedSourceHash = hashDigest;
+    <span class="keyword">return</span> cachedSource;
+}
+</code></pre><p>最后 webpack 会在 Compiler 的 emitAssets 方法里创建输出目录，把 compilation.assets 的结果写入输出文件。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag">#JavaScript</a>
+          
+            <a href="/tags/Webpack/" rel="tag">#Webpack</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/23/web performance/" rel="next" title="前端优化">
+                <i class="fa fa-chevron-left"></i> 前端优化
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/03/29/compiler/"
+           data-title="写一个Webpack Plugin需要了解的关键点" data-url="http://eatingmiao.github.io/2018/03/29/compiler/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="https://avatars0.githubusercontent.com/u/5902080?v=3&s=460" alt="Eating" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Eating</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">少不更事</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#事件流"><span class="nav-number">1.</span> <span class="nav-text">事件流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关键事件"><span class="nav-number">1.1.</span> <span class="nav-text">关键事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关键实体"><span class="nav-number">1.2.</span> <span class="nav-text">关键实体</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Compiler"><span class="nav-number">2.</span> <span class="nav-text">Compiler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Compilation"><span class="nav-number">3.</span> <span class="nav-text">Compilation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Template"><span class="nav-number">4.</span> <span class="nav-text">Template</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eating</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"eatingmiao"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>
