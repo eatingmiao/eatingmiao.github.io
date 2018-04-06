@@ -209,6 +209,223 @@
             
               
                 
+                <a class="post-title-link" href="/2018/04/06/zone/" itemprop="url">
+                  Angular Zone
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2018-04-06T00:00:00+08:00" content="2018-04-06">
+              2018-04-06
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/04/06/zone/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/04/06/zone/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="NgZone">NgZone</h2><p>在 Angular1 中，双向绑定和视图更新依赖于脏值检查（dirty-checking），每当用 ng-model 绑定一个变量，scope 通过 $watch 方法向 this.$$watchers 数组中添加 watcher 对象，每当 $digest 循环被触发时，它会遍历 $$watchers 数组，执行 watcher 中的 watchFn，获取当前 scope 上相应的值，然后与 watcher 中的 last，也就是上一次的值做比较，若两值不相等，就执行 listenerFn。</p>
+<p>从中可以看出，如果在非 Angular 的上下文改变数据 Model，Angular 将无法得知数据的变化。因此在第三方事件或者 Ajax 的回调中，需要使用 $scope.$apply 来触发视图更新。另外，即使升级到 Angular2，如果绑定了大量的数据，或者数据频繁更新，性能也会受到影响。比如一个绑定的列表需要经历循环，为了不频繁触发视图的更新，可以使用Zone.js的方法来屏蔽 Angular 的跟踪变化：</p>
+<pre><code><span class="attribute">list</span>: <span class="string">Array&lt;number&gt; = [];</span>
+
+<span class="typescript"><span class="constructor"><span class="keyword">constructor</span>(private zone: NgZone) </span>{ }
+
+ngOnInit() {
+    <span class="keyword">this</span>.zone.runOutsideAngular(() =&gt; {
+        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) {
+            <span class="keyword">this</span>.list.push(<span class="built_in">Math</span>.random());
+            <span class="keyword">if</span>(i === <span class="number">99</span>) {
+                <span class="keyword">this</span>.zone.run(() =&gt; {
+                    <span class="keyword">this</span>.list = <span class="keyword">this</span>.list;
+                });
+            }
+        }
+    });
+}</span>
+</code></pre><p>NgZone 就是基于 Zone 实现的，它是Zone派生出来的一个子Zone，在 Angular 环境内注册的异步事件都运行在这个子 Zone 内，并扩展了自有的一些 API 并添加了一些功能性的方法到它的执行上下文中。Angular2 对于组件树的变化检测也是基于 NgZone 来实现和优化的，以下是组件变化检测的引用 ChangeDetectorRef：</p>
+<pre><code>export <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">ChangeDetectorRef</span> {
+    <span class="function"><span class="keyword">abstract</span> <span class="title">markForCheck</span>(<span class="params"></span>): <span class="keyword">void</span></span>;
+    <span class="function"><span class="keyword">abstract</span> <span class="title">detach</span>(<span class="params"></span>): <span class="keyword">void</span></span>;         
+    <span class="function"><span class="keyword">abstract</span> <span class="title">detectChanges</span>(<span class="params"></span>): <span class="keyword">void</span></span>; 
+    <span class="function"><span class="keyword">abstract</span> <span class="title">reattach</span>(<span class="params"></span>): <span class="keyword">void</span></span>; 
+}
+</code></pre><ul>
+<li>detach 从变化检测树中分离变化检测器，该组件的变化检测器将不再执行变化检测</li>
+<li>detechChanges 从变化检测树中分离变化检测器，该组件的变化检测器将不再执行变化检测</li>
+<li>reattach 从该组件到各个子组件执行一次变化检测</li>
+</ul>
+<h2 id="Zone">Zone</h2><blockquote>
+<p>A Zone is an execution context that persists across async tasks. You can think of it as thread-local storage for JavaScript VMs.</p>
+</blockquote>
+<p>在 Zone.js 中，Zone 代表一个可以控制异步任务的执行上下文。Zone.js的设计灵感来源于Dart语言，它类似于 Java 的 TLS（thread-local storage: 线程本地存储）技术，可以认为 Zone.js 是将 TLS 引入到 JavaScript 语言中的实现框架。</p>
+<p><a href="https://domenic.github.io/zones/" target="_blank" rel="external">Zone</a> 是一个全局对象，用来配置有关如何拦截和跟踪异步回调的规则。Zone 有以下能力：</p>
+<ul>
+<li>拦截异步任务调度</li>
+<li>提供了将数据附加到 zones 的方法</li>
+<li>为异常处理函数提供正确的上下文</li>
+<li>拦截阻塞的方法，如 alert、confirm 方法</li>
+</ul>
+<p>一个简单的实现：</p>
+<pre><code>Zone.current.fork({}).run(<span class="keyword">function</span>() { 
+    Zone.current.inTheZone = true;
+    console.log(<span class="string">'1: '</span>,Zone);
+    setTimeout(function() {
+        console.log(<span class="string">'in the zone: '</span> + !!Zone.current.inTheZone); 
+        console.log(<span class="string">'2:'</span>,Zone);
+    }, <span class="number">0</span>);
+});
+
+console.log(<span class="string">'in the zone: '</span> + !!Zone.current.inTheZone);
+console.log(<span class="string">'3:'</span>,Zone);
+
+// 运行结果
+// <span class="number">1</span>: Zone {parent: Zone, <span class="variable">$id</span>: <span class="number">2</span>, inThenZone: true}
+// <span class="keyword">in</span> the zone: <span class="literal">false</span>
+// <span class="number">3</span>: Zone {parent: null, <span class="variable">$id</span>: <span class="number">1</span>, onError: null}
+// <span class="keyword">in</span> the zone: <span class="literal">true</span>
+// <span class="number">2</span>: Zone {parent: Zone, <span class="variable">$id</span>: <span class="number">3</span>}
+</code></pre><ol>
+<li>最开始加载 Zone.js 时，创建 Root Zone，全局 Zone 最开始默认id为1；</li>
+<li>Zone.fork.run的时候，Zone 调用 Zone.current 对象上的 fork 方法创建新 的 zone，我们称之为 childZone，id 为 2；</li>
+<li>执行 setTimeout 的时候，由于被 Zone.js 包装过，这里调用的并不是原本的 setTimeout 方法，实际上创建了一个配置代理，这个代理会保留一个指向创建时所属 Zone 的引用，即 childZone。</li>
+</ol>
+<p>Zone.js 中将 run 方法块分为了两个Task，它们分别是方法体运行时的 Task 和异步 setTimeout 的 Task。fork 方法会产生一个继承至 Zone 的子类，并在 fork 函数中可以配置特定的钩子方法，形成独立的 zone 上下文。而 run 方法则是启动执行业务代码的对外接口。</p>
+<p>同时 zone 也支持父子继承，以及它也定义了一套 DSL 语法，支持$、+、-的前缀。</p>
+<ul>
+<li>\$会传递父类 zone 的钩子函数，便于对 zone 钩子函数执行的控制；</li>
+<li>-代表在父 zone 的钩子函数之前运行本钩子函数；</li>
+<li>+则与之相反，代表在父 zone 的钩子函数之后运行本钩子函数</li>
+</ul>
+<p>Zone.js 采用 Monkey-patched 的暴力方式将 JavaScript 中的异步任务都包装在 Zone 的上下文中，默认情况下 Zone 重写了以下方法：</p>
+<ul>
+<li>setInterval、clearInterval、setTimeout、clearTimeout</li>
+<li>alert、prompt、confirm</li>
+<li>requestAnimationFrame、cancelAnimationFrame</li>
+<li>addEventListener、removeEventListener</li>
+</ul>
+<p>以及对 promise、geolocation、websocket 等也进行了包裹封装：</p>
+<pre><code><span class="keyword">var</span> <span class="keyword">set</span> = <span class="string">'set'</span>;
+<span class="keyword">var</span> clear = <span class="string">'clear'</span>;
+<span class="keyword">var</span> blockingMethods = [<span class="string">'alert'</span>, <span class="string">'prompt'</span>, <span class="string">'confirm'</span>];
+<span class="keyword">var</span> _global = <span class="keyword">typeof</span> <span class="built_in">window</span> === <span class="string">'object'</span> &amp;&amp; <span class="built_in">window</span> || 
+<span class="keyword">typeof</span> self === <span class="string">'object'</span> &amp;&amp; self || global;
+patchTimer(_global, <span class="keyword">set</span>, clear, <span class="string">'Timeout'</span>);
+patchTimer(_global, <span class="keyword">set</span>, clear, <span class="string">'Interval'</span>);
+patchTimer(_global, <span class="keyword">set</span>, clear, <span class="string">'Immediate'</span>);
+patchTimer(_global, <span class="string">'request'</span>, <span class="string">'cancel'</span>, <span class="string">'AnimationFrame'</span>);
+patchTimer(_global, <span class="string">'mozRequest'</span>, <span class="string">'mozCancel'</span>, <span class="string">'AnimationFrame'</span>);
+patchTimer(_global, <span class="string">'webkitRequest'</span>, <span class="string">'webkitCancel'</span>, <span class="string">'AnimationFrame'</span>);
+</code></pre><p>每一个异步的任务在 Zone.js 都被当做为一个 Task，并提供了执行前后的钩子函数（hook）。这些钩子函数包括：</p>
+<ul>
+<li>onZoneCreated：产生一个新的 Zone 对象时的钩子函数。Zone.fork 也会产生一个继承至基类 Zone 的新 zone，形成一个独立的 zone 上下文</li>
+<li>beforeTask：Zone Task 执行前的钩子函数</li>
+<li>afterTask：Zone Task 执行完成后的钩子函数</li>
+<li>onError：Zone 运行 Task 时候的异常钩子函数</li>
+</ul>
+<p>钩子示例：</p>
+<pre><code><span class="built_in">let</span> <span class="built_in">log</span> = <span class="function"><span class="keyword">function</span><span class="params">(phase)</span> {</span>
+    return <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        console.<span class="built_in">log</span>(phase);
+    };
+};
+
+Zone.current.fork({
+    onZoneCreated: <span class="built_in">log</span>(<span class="string">"onZoneCreated"</span>),
+    beforeTask: <span class="built_in">log</span>(<span class="string">"beforeTask"</span>),
+    afterTask: <span class="built_in">log</span>(<span class="string">"afterTask"</span>)
+}).run(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    <span class="built_in">let</span> first = <span class="built_in">log</span>(<span class="number">1</span>),
+    second = <span class="built_in">log</span>(<span class="number">2</span>),
+    third = <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        setTimeout(<span class="built_in">log</span>(<span class="number">3</span>), <span class="number">0</span>);
+    };
+
+    first();
+    third();
+    second();
+});
+
+<span class="comment">// 执行结果：</span>
+<span class="comment">// beforeTask</span>
+<span class="comment">// 1</span>
+<span class="comment">// 2</span>
+<span class="comment">// afterTask</span>
+<span class="comment">// onZoneCreated</span>
+<span class="comment">// beforeTask</span>
+<span class="comment">// 3</span>
+<span class="comment">// afterTask</span>
+</code></pre>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/03/29/compiler/" itemprop="url">
                   写一个Webpack Plugin需要了解的关键点
                 </a>
@@ -1941,95 +2158,6 @@ Obj.say(); <span class="comment">// time</span>
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/10/=&copy/" itemprop="url">
-                  “=”赋值和angular.copy()赋值的区别
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-09-10T00:00:00+08:00" content="2016-09-10">
-              2016-09-10
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/10/=&copy/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/10/=&copy/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>刚开始在做以下这个案例时，<br><img src="http://7xowup.com1.z0.glb.clouddn.com/=&amp;copy.gif" alt="choose-member"><br>弹出插件的控制器传送的数据变量直接用了“=”来赋值，导致即使点击了插件的“取消”按钮，另一个控制器的数据也直接更新了，在此不需要即时更新，用户完成选择的时候才需要更新数据，这样的话用“=”就会形成一个即时更新的通道，所以应该用angular的copy来赋值才对。</p>
-<p>还是以此场景为案例，详细来说说这两个赋值的区别：<br>内存里有一段地址储存了{name: “During”}这个数据，页面控制器的成员数据$scope.member指向了它，插件的控制器中的选择数据$scope.select也指向了它，当这两个控制器的数据通过angular的factory取出数据并使$scope.member = $scope.select的时候，事实上是让二者同时指向了该数据，因此一个变了另外一个也会跟着变。<br>如果用$scope.member = angular.copy($scope.select)，那就是先做了一份select数据的拷贝，也就是内存中多了另外一份数据，值相同但地址不同，然后让$scope.member指向了这份拷贝，所以二者指向了不同的内存地址，就不会相互影响了。</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -2076,7 +2204,7 @@ Obj.say(); <span class="comment">// time</span>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -2090,7 +2218,7 @@ Obj.say(); <span class="comment">// time</span>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">10</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
