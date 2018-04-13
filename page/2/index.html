@@ -205,6 +205,110 @@
             
               
                 
+                <a class="post-title-link" href="/2016/11/01/type/" itemprop="url">
+                  JavaScript类型
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-11-01T00:00:00+08:00" content="2016-11-01">
+              2016-11-01
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/01/type/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/01/type/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>上一篇笔记提到了赋值和复制的微妙区别，现在来整理一下理论。</p>
+<p>JavaScript虽然没有类，但仍存在两种类型：</p>
+<ul>
+<li>原始类型 - 简单数据值</li>
+<li>引用类型 - 对象，本质为指向内存位置的引用</li>
+</ul>
+<p>其他编程语言用栈储存原始类型，用堆储存引用类型，js则用一个变量对象追踪变流量的生存期，原始值被保存在变量对象内，而引用值则作为一个指针保存在变量对象内，该指针指向实际对象在内存中的存储位置。</p>
+<h4 id="原始类型">原始类型</h4><ul>
+<li>boolean</li>
+<li>number</li>
+<li>string</li>
+<li>null</li>
+<li>undefined</li>
+</ul>
+<p>原始类型的变量值直接保存原始值，当原始值赋给一个变量时，每个变量有自己的一份数据拷贝。</p>
+<h4 id="引用类型">引用类型</h4><p>引用值是引用类型的实例，就是对象，对象是属性的无序列表，js里的函数其实也是引用值。<br>引用类型不在变量中直接保存对象，所以引用值变量实际上并不包含对象的实例，而是一个指向了内存中实际对象所在位置的指针。</p>
+<p>js有垃圾回收机制，使用引用类型时虽然不必担心内存非配，但最好在对象使用完毕后解除引用，让垃圾收集器对其内存进行释放，最佳解除手段是将对象置为null。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/10/=&copy/" itemprop="url">
                   “=”赋值和angular.copy()赋值的区别
                 </a>
@@ -1044,7 +1148,7 @@ angular.forEach(<span class="variable">$scope</span>.menuList,<span class="keywo
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

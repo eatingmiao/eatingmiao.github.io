@@ -1,0 +1,771 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="一个问题可以用不同的算法解决，算法就是你解决问题的方法，一个算法的评价主要两方面来考虑： 
+
+时间复杂度 
+空间复杂度
+
+时间复杂度算法中基本操作语句重复执行的次数，称为语句频度或者时间频度。若有某个辅助函数f(n),使得当n趋近于无穷大时，T(n)/f(n)的极限值为不等于零的常数，则称f(n)是T(n)的同数量级函数。基本操作重复执行的次数是问题规模n的某个函数f(n)，于是算法的时间量度可以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法复杂度">
+<meta property="og:url" content="http://eatingmiao.github.io/2018/04/13/o/index.html">
+<meta property="og:site_name" content="Eating's Notes">
+<meta property="og:description" content="一个问题可以用不同的算法解决，算法就是你解决问题的方法，一个算法的评价主要两方面来考虑： 
+
+时间复杂度 
+空间复杂度
+
+时间复杂度算法中基本操作语句重复执行的次数，称为语句频度或者时间频度。若有某个辅助函数f(n),使得当n趋近于无穷大时，T(n)/f(n)的极限值为不等于零的常数，则称f(n)是T(n)的同数量级函数。基本操作重复执行的次数是问题规模n的某个函数f(n)，于是算法的时间量度可以">
+<meta property="og:updated_time" content="2018-04-13T16:00:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="算法复杂度">
+<meta name="twitter:description" content="一个问题可以用不同的算法解决，算法就是你解决问题的方法，一个算法的评价主要两方面来考虑： 
+
+时间复杂度 
+空间复杂度
+
+时间复杂度算法中基本操作语句重复执行的次数，称为语句频度或者时间频度。若有某个辅助函数f(n),使得当n趋近于无穷大时，T(n)/f(n)的极限值为不等于零的常数，则称f(n)是T(n)的同数量级函数。基本操作重复执行的次数是问题规模n的某个函数f(n)，于是算法的时间量度可以">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> 算法复杂度 | Eating's Notes </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Eating's Notes</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                算法复杂度
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2018-04-13T00:00:00+08:00" content="2018-04-13">
+              2018-04-13
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/04/13/o/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/04/13/o/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>一个问题可以用不同的算法解决，算法就是你解决问题的方法，一个算法的评价主要两方面来考虑： </p>
+<ul>
+<li>时间复杂度 </li>
+<li>空间复杂度</li>
+</ul>
+<h2 id="时间复杂度">时间复杂度</h2><p>算法中基本操作语句重复执行的次数，称为<strong>语句频度</strong>或者<strong>时间频度</strong>。若有某个辅助函数f(n),使得当n趋近于无穷大时，T(n)/f(n)的极限值为不等于零的常数，则称f(n)是T(n)的同数量级函数。基本操作重复执行的次数是问题规模n的某个函数f(n)，于是算法的时间量度可以记为：T(n) = O(f(n))。</p>
+<p>通俗一点讲，其实所谓的时间复杂度，就是找了一个同样曲线类型的函数f(n)来表示这个算法的在n不断变大时的趋势。当输入量n逐渐加大时，时间复杂性的极限情形称为算法的“渐近时间复杂性”。</p>
+<h3 id="大O表示法">大O表示法</h3><p>计算机科学中，<a href="https://zh.wikipedia.org/wiki/%E5%A4%A7O%E7%AC%A6%E5%8F%B7" target="_blank" rel="external">大O表示法</a> 被用来描述一个算法的性能或复杂度。大O表示法可以用来描述一个算法的最差情况，或者一个算法执行的耗时或占用空间（例如内存或磁盘占用）。</p>
+<p>大O表示法将算法的所有步骤转换为代数项，然后排除不会对问题的整体复杂度产生较大影响的较低阶常数和系数。如下所示：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">规律</th>
+<th style="text-align:center">Big-O</th>
+<th style="text-align:center">说明 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">O(1)</td>
+<td style="text-align:center">一个常数</td>
+</tr>
+<tr>
+<td style="text-align:center">2n + 10</td>
+<td style="text-align:center">O(n)</td>
+<td style="text-align:center">n对整体结果会产生最大影响</td>
+</tr>
+<tr>
+<td style="text-align:center">5n²</td>
+<td style="text-align:center">O(n²)</td>
+<td style="text-align:center">n²具有最大影响</td>
+</tr>
+</tbody>
+</table>
+<p>时间复杂度对于算法进行的分析和大致的比较非常有用，但是真正的情况可能会因为一些其他因素造成差异。比如一个低附加代价的O(n2)算法在n较小的情况下可能比一个高附加代价的 O(nlogn)算法运行得更快。但是，n越来越大以后，相比较而言较慢上升函数的算法会运行的更快。</p>
+<h3 id="常见的时间复杂度">常见的时间复杂度</h3><p>以下列举一些常见时间复杂度的算法。</p>
+<h4 id="O(1)_常量时间">O(1) 常量时间</h4><p>O(1)的算法是一些运算次数为常数的算法。例如：</p>
+<pre><code>var a = 1,b = 2,tmp<span class="comment">;</span>
+tmp = a<span class="comment">;</span>
+a = b<span class="comment">;</span>
+b = tmp<span class="comment">;</span>
+</code></pre><p>以上一共四条语句三条操作，单条操作的频度为1，即使他有成千上万条操作，也只是个较大常数，这一类的时间复杂度为O(1)。</p>
+<h4 id="O(1)_线性时间">O(1) 线性时间</h4><p>O(n)的算法是一些线性算法。例如：</p>
+<pre><code><span class="keyword">var</span> <span class="keyword">sum</span> = 0; 
+<span class="keyword">for</span>(i=0; i&lt;<span class="keyword">n</span>; i++) {
+    <span class="keyword">sum</span>++;
+}
+</code></pre><p>上面代码中第一句频度1，第二句频度为n+1，第三句频度为n，f(n)=n+n+1+1=2n+2，所以时间复杂度O(n)。这一类算法中操作次数和n正比线性增长。</p>
+<h4 id="O(logn)_对数时间">O(logn) 对数时间</h4><p>O(logn)的算法能在每个步骤去掉一半数据元素，如二分检索。</p>
+<pre><code><span class="keyword">var</span> i = <span class="number">1</span>;
+<span class="keyword">while</span>(i&lt;=n) <span class="comment">{
+    i = i*2;
+}</span>
+</code></pre><p>设第三行的频度是f(n)，执行了f(n)次后，2*2*2…等于是2^f(n)，则：</p>
+<pre><code>2^<span class="literal">f</span>(<span class="keyword">n</span>) &lt;= <span class="keyword">n</span> 
+<span class="literal">f</span>(<span class="keyword">n</span>) &lt;= <span class="keyword">log</span>₂<span class="keyword">n</span>
+</code></pre><p>取最大值 f(n) = log₂n，所以 T(n) = O(log₂n) =&gt; O(logn)。 </p>
+<p>如果一个for循环套一个二分，那么时间复杂度则为 O(nlogn)。</p>
+<h4 id="O(n²)_平方时间">O(n²) 平方时间</h4><p>O(n²)最常见的就是平时的对数组进行排序的各种算法，如插入排序。</p>
+<pre><code><span class="keyword">var</span> <span class="keyword">sum</span> = 0； 
+<span class="keyword">for</span>(i=0; i&lt;<span class="keyword">n</span>; i++) {
+    <span class="keyword">for</span>(j=0; j&lt;<span class="keyword">n</span>; j++) {
+        <span class="keyword">sum</span>++;
+    }
+}
+</code></pre><p>第一行频度1，第二行n，第三行n²，第四行n²，T(n) = 2n²+n+1 =&gt; O(n²)。</p>
+<p>矩阵相乘算法运算则是立方阶 O(n³)。</p>
+<h4 id="O(2^n)_指数时间">O(2^n) 指数时间</h4><p>指数复杂度通常出现在这种情况：你对数据了解甚少，但是你必须尝试其所有的排列或者组合。比如求具有n个元素集合的所有子集的算法。</p>
+<pre><code>function <span class="func"><span class="keyword">func</span><span class="params">(n)</span></span> {
+    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) {
+        <span class="keyword">return</span> <span class="number">1</span>;
+    } <span class="keyword">else</span> {
+        <span class="keyword">return</span> <span class="func"><span class="keyword">func</span><span class="params">(n - <span class="number">1</span>)</span></span> + <span class="func"><span class="keyword">func</span><span class="params">(n - <span class="number">2</span>)</span></span>;
+    }
+}
+</code></pre><p>当 n = 0, 1, …, n</p>
+<pre><code><span class="function"><span class="title">T</span><span class="params">(<span class="number">0</span>)</span></span> = <span class="function"><span class="title">T</span><span class="params">(<span class="number">1</span>)</span></span> = <span class="number">1</span>
+<span class="function"><span class="title">T</span><span class="params">(n)</span></span> = <span class="function"><span class="title">T</span><span class="params">(n - <span class="number">1</span>)</span></span> + <span class="function"><span class="title">T</span><span class="params">(n - <span class="number">2</span>)</span></span> + <span class="number">1</span>
+</code></pre><p>T(n) 是一个斐波那契数列，通过归纳证明法可以证明，当 n &gt;= 1 时 T(n) &lt; (5/3)^n，同时当 n &gt; 4 时 T(n) &gt;= (3/2)^n。所以该方法的时间复杂度可以表示为 O((5/3)^n)，简化后为 O(2^n)。</p>
+<p>求具有N个元素的全排列的算法则是O(n!)。</p>
+<p>时间复杂度按n越大算法越复杂来排的话：常数阶O(1)、对数阶O(logn)、线性阶O(n)、线性对数阶O(nlogn)、平方阶O(n²)、立方阶O(n³)、……k次方阶O(n的k次方)、指数阶O(2的n次方)。</p>
+<h2 id="空间复杂度">空间复杂度</h2><p>空间复杂度是对一个算法在运行过程中临时占用存储空间大小的量度，记做S(n)=O(f(n))。比如直接插入排序的时间复杂度是O(n^2)，空间复杂度是O(1)。而一般的递归算法就要有O(n)的空间复杂度了，因为每次递归都要存储返回信息。</p>
+<h2 id="时空复杂度">时空复杂度</h2><p>对于一个算法，其时间复杂度和空间复杂度往往是相互影响的。当追求一个较好的时间复杂度时，可能会使空间复杂度的性能变差，即可能导致占用较多的存储空间；反之，当追求一个较好的空间复杂度时，可能会使时间复杂度的性能变差，即可能导致占用较长的运行时间。另外，算法的所有性能之间都存在着或多或少的相互影响。因此，当设计一个算法（特别是大型算法）时，要综合考虑算法的各项性能，算法的使用频率，算法处理的数据量的大小，算法描述语言的特性，算法运行的机器系统环境等各方面因素，才能够设计出比较好的算法。算法的时间复杂度和空间复杂度合称为算法的复杂度。</p>
+<p>比如 计数排序 是一个增加空间复杂度来降低时间复杂度的算法。计数排序的算法复杂度为 O(n)，适合于小范围集合的排序。</p>
+<blockquote>
+<p>Counting sort (sometimes referred to as ultra sort or math sort[1]) is a sorting algorithm which (like bucket sort) takes advantage of knowing the range of the numbers in the array to be sorted (array A). It uses this range to create an array C of this length. Each index i in array C is then used to count how many elements in A have the value i; then counts stored in C can then be used to put the elements in A into their right position in the resulting sorted array. The algorithm was created by Harold H. Seward in 1954.</p>
+</blockquote>
+<p>计数排序是一个类似于桶排序的排序算法，其优势是对已知数量范围的数组进行排序。它创建一个长度为这个数据范围的数组C，C中每个元素记录要排序数组中对应记录的出现个数。这个算法于1954年由 Harold H. Seward 提出。</p>
+<p>思路</p>
+<ol>
+<li>找出待排序的数组中最大和最小的元素。</li>
+<li>统计数组中每个值为i的元素出现的次数，存入数组C的第i项。</li>
+<li>对所有的计数累加（从C中的第一个元素开始，每一项和前一项相加）。</li>
+<li>反向填充目标数组：将每个元素i放在新数组的第C(i)项，每放一个元素就将C(i)减去1。</li>
+</ol>
+<p>实现</p>
+<p>function countSort(arr) {<br>    let len = arr.length;<br>    let countArr = [];<br>    let resArr = [];<br>    let min = max = arr[0];</p>
+<pre><code>for(var i = 0; i &lt; len; i++){
+    min = min &lt;= arr<span class="comment">[i]</span> ? min : arr<span class="comment">[i]</span>;
+    max = max &gt;= arr<span class="comment">[i]</span> ? max : arr<span class="comment">[i]</span>;
+    countArr<span class="comment">[arr<span class="comment">[i]</span>]</span> = countArr<span class="comment">[arr<span class="comment">[i]</span>]</span> ? countArr<span class="comment">[arr<span class="comment">[i]</span>]</span>++ : 1;
+}
+
+for (let i = min; i &lt; max; i++) {
+    countArr<span class="comment">[i + 1]</span> = (countArr<span class="comment">[i + 1]</span>||0) + (countArr<span class="comment">[i]</span>|| 0);
+}
+
+for (let i = len - 1; i &gt;= 0; i--) {
+    resArr<span class="comment">[countArr<span class="comment">[arr<span class="comment">[i]</span>]</span> - 1]</span> = arr<span class="comment">[i]</span>;
+    countArr<span class="comment">[arr<span class="comment">[i]</span>]</span>--;
+}
+
+return resArr;
+</code></pre><p>}</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag">#JavaScript</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/06/zone/" rel="next" title="Angular Zone">
+                <i class="fa fa-chevron-left"></i> Angular Zone
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/04/13/o/"
+           data-title="算法复杂度" data-url="http://eatingmiao.github.io/2018/04/13/o/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="https://avatars0.githubusercontent.com/u/5902080?v=3&s=460" alt="Eating" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Eating</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">少不更事</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#时间复杂度"><span class="nav-number">1.</span> <span class="nav-text">时间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#大O表示法"><span class="nav-number">1.1.</span> <span class="nav-text">大O表示法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的时间复杂度"><span class="nav-number">1.2.</span> <span class="nav-text">常见的时间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#O(1)_常量时间"><span class="nav-number">1.2.1.</span> <span class="nav-text">O(1) 常量时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#O(1)_线性时间"><span class="nav-number">1.2.2.</span> <span class="nav-text">O(1) 线性时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#O(logn)_对数时间"><span class="nav-number">1.2.3.</span> <span class="nav-text">O(logn) 对数时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#O(n²)_平方时间"><span class="nav-number">1.2.4.</span> <span class="nav-text">O(n²) 平方时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#O(2^n)_指数时间"><span class="nav-number">1.2.5.</span> <span class="nav-text">O(2^n) 指数时间</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#空间复杂度"><span class="nav-number">2.</span> <span class="nav-text">空间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时空复杂度"><span class="nav-number">3.</span> <span class="nav-text">时空复杂度</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eating</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"eatingmiao"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>
