@@ -209,6 +209,196 @@
             
               
                 
+                <a class="post-title-link" href="/2018/04/20/component/" itemprop="url">
+                  Web Component
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2018-04-20T00:00:00+08:00" content="2018-04-20">
+              2018-04-20
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/04/20/component/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/04/20/component/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>观望这几年的前端框架，React、Vue、Angular2+ 在应用打包，状态管理，响应性和CLIs等方面正在互相学习和渗透，最终选用的解决方案也大同小异。</p>
+<p>React 为现代前端开发普及了 Comonent 的概念，Vue 一开始就将组件作为其核心特性之一。在 Angular v1.x 时期，社区就有人开始编写<a href="http://www.airpair.com/angularjs/posts/component-based-angularjs-directives#1-component-based-directives-in-angularjs" target="_blank" rel="external">基于组件的指令</a>，后来 Angular v1.6 引入了 angular.component() 以便于编写基于组件的指令。2016年发布的 Angular 2.0 才为开发者带来真正的组件。</p>
+<p>4月18日在美国盐湖城举办的 ng-conf 会议，Angular 核心开发人员之一 Rob Wormald 也表示，在 Angular v6 及以后的迭代中也依然沿用 Web Component 作为核心元素。</p>
+<h2 id="定义">定义</h2><blockquote>
+<p>Web components are a set of web platform APIs that allow you to create new custom, reusable, encapsulated HTML tags to use in web pages and web apps. Custom components and widgets build on the Web Component standards, will work across modern browsers, and can be used with any JavaScript library or framework that works with HTML.</p>
+</blockquote>
+<p>Web 组件是一套基于 Web 平台的标准化API，允许开发者在 Web 页面和 Web 应用程序中创建新的自定义、可重用、封装的 HTML 标记。在Web组件标准上构建的自定义组件和小部件将在现代浏览器中运行，并且可以与任何需要使用 HTML 的 Js 库或框架一起使用。</p>
+<p>Web Component 由四种主要技术组成：</p>
+<ul>
+<li>Custom Elements</li>
+<li>Shadow DOM</li>
+<li>HTML Templates</li>
+<li>HTML Imports</li>
+</ul>
+<p>通过 Custom Elements 自定义标签元素来引入 HTML Templates 是可重用组件化的基础。Shadow DOM 可以隔离组件间的冲突和影响，HTML Imports 提供了一种将一个.html文档中定义的所有资源导入另一个文档的范围的方法，该方法不能有效控制管理资源的依赖性而被 Mozilla 反对。</p>
+<h3 id="Custom_Elements">Custom Elements</h3><p>该项标准还处于non-normative的状态，请查看最新的<a href="https://www.w3.org/TR/custom-elements/" target="_blank" rel="external">规范</a>。</p>
+<p>Custom Elements 提供了一些回调函数控制自定义元素的生命周期：</p>
+<ul>
+<li>connectedCallback：在自定义元素首次连接到文档的DOM时调用。</li>
+<li>disconnectedCallback：在自定义元素与文档的DOM断开连接时调用。</li>
+<li>adoptedCallback：在自定义元素移动到新文档时调用。</li>
+<li>attributeChangedCallback：在添加，删除或更改其中一个自定义元素的属性时调用。</li>
+</ul>
+<p>封装一个 hello-world 组件，该组件绑定一个允许更改的 name 属性，并对其值进行监听：</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">HTMLElement</span> {</span>
+    static observedAttributes = [<span class="symbol">'nam</span>e']
+    attributeChangedCallback(key, oldValue, newValue){}
+    connectedCallback(){}
+    disconnectedCallback(){}
+    set name(value){}
+    get name(){}
+    onClick(){
+        <span class="keyword">this</span>.dispatchEvent(<span class="keyword">new</span> <span class="type">CustomEvent</span>(<span class="symbol">'nameChang</span>e'),{...}));
+    }
+
+}
+customElements.define(<span class="symbol">'hello</span>-world', <span class="type">HelloWorld</span>);
+</code></pre><h3 id="Shadow_DOM">Shadow DOM</h3><p>Shadow DOM 为 Web 组件中的 DOM 和 CSS 提供了封装。因为组件的样式与主文档的样式也可能会互相影响，而实际在使用组件的时候并不需要关心组件的内部结构，只需关心组件本身，所以 Shadow DOM 把组件元素与文档隔离和封装，能更好地组织页面元素。</p>
+<p>Shadow DOM 必须附加在一个元素上，可以是HTML文件中的一个元素，也可以是脚本中创建的元素；可以是原生的元素，如\<div\>、\<p\>；也可以是自定义元素如 \<my-element\>。</my-element\></p\></div\></p>
+<pre><code>// 创建 shadow DOM
+var shadow = document.querySelector('#hostElement').attachShadow({mode: 'open'});
+// 给 shadow DOM 添加文字
+shadow.innerHTML = '<span class="tag">&lt;<span class="title">p</span>&gt;</span>Here is some new text<span class="tag">&lt;/<span class="title">p</span>&gt;</span>';
+// 添加CSS，将文字变红
+shadow.innerHTML += '<span class="tag">&lt;<span class="title">style</span>&gt;</span><span class="css"><span class="tag">p</span> <span class="rules">{ <span class="rule"><span class="attribute">color</span>:<span class="value"> red</span></span>; }</span></span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>';
+</code></pre><h2 id="实现">实现</h2><p>React、Vue、Angular2+ 三个框架都可以在组件中指定事件处理器并对 DOM 事件进行监听和触发。以下用三种方式封装一个记录点击次数的按钮。</p>
+<p>在 Angular 中自定义事件可以通过调用 EventEmitter 的 emit 方法来触发：</p>
+<pre><code>@Component({
+  selector: 'counter',
+  template: `
+   <span class="tag">&lt;<span class="title">button</span> (<span class="attribute">click</span>)=<span class="value">"increment()"</span>&gt;</span>
+        <span class="comment"></span>
+   <span class="tag">&lt;/<span class="title">button</span>&gt;</span>`,
+})
+class CounterComponent {  
+  private count: number = 0;
+  @Output() increment = new EventEmitter<span class="tag">&lt;<span class="title">number</span>&gt;</span>();
+
+    increment() {
+      this.count += 1;
+      this.increment.emit('increment');
+    }
+}
+</code></pre><p>在 Vue 中可以通过注射 $emit 来触发自定义事件：</p>
+<pre><code>Vue.component('counter', {  
+  template: `
+   <span class="tag">&lt;<span class="title">button</span> @<span class="attribute">click</span>=<span class="value">"increment"</span>&gt;</span>
+        <span class="comment"></span>
+   <span class="tag">&lt;/<span class="title">button</span>&gt;</span>`,
+  data: function () {
+    return { count: 0 };
+  },
+  methods: {
+    increment() {
+      this.count += 1;
+      this.$emit('increment');
+    },
+  },
+})
+</code></pre><p>React 实现自定义事件的方式有点不同，Angular 和 Vue 作为子组件的事件会向父组件传递，而 React 是让子组件继承父组件的 props，props 就相当于 Angular 的 inputs，依据父组件传递给 Counter 的数据流，当 state 改变时，Counter 触发 increment 事件进行重新渲染。</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">React</span>.<span class="title">Component</span> {</span> 
+  constructor(props) {
+    <span class="keyword">super</span>(props);
+    <span class="keyword">this</span>.state = { count: <span class="number">0</span> };
+  }
+
+  increment() {
+    <span class="keyword">this</span>.setState(
+      prevState =&gt; ({ count: prevState.count + <span class="number">1</span> }),
+      () =&gt; {
+        <span class="keyword">this</span>.props.handleIncrement(<span class="keyword">this</span>.state.count);
+      },
+    );
+  }
+
+  render() {
+    <span class="keyword">return</span> (
+      &lt;button onClick={() =&gt; <span class="keyword">this</span>.increment()}&gt;
+        { <span class="keyword">this</span>.state.count }
+      &lt;/button&gt;
+      );
+  }
+}
+</code></pre>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/04/13/o/" itemprop="url">
                   算法复杂度
                 </a>
@@ -351,25 +541,30 @@ b = tmp<span class="comment">;</span>
 <li>反向填充目标数组：将每个元素i放在新数组的第C(i)项，每放一个元素就将C(i)减去1。</li>
 </ol>
 <p>实现</p>
-<p>function countSort(arr) {<br>    let len = arr.length;<br>    let countArr = [];<br>    let resArr = [];<br>    let min = max = arr[0];</p>
-<pre><code>for(var i = 0; i &lt; len; i++){
-    min = min &lt;= arr<span class="comment">[i]</span> ? min : arr<span class="comment">[i]</span>;
-    max = max &gt;= arr<span class="comment">[i]</span> ? max : arr<span class="comment">[i]</span>;
-    countArr<span class="comment">[arr<span class="comment">[i]</span>]</span> = countArr<span class="comment">[arr<span class="comment">[i]</span>]</span> ? countArr<span class="comment">[arr<span class="comment">[i]</span>]</span>++ : 1;
+<pre><code>function countSort(arr) {
+    let len = arr.length;
+    let countArr = <span class="comment">[]</span>;
+    let resArr = <span class="comment">[]</span>;
+    let min = max = arr<span class="comment">[0]</span>;
+
+    for(var i = 0; i &lt; len; i++){
+        min = min &lt;= arr<span class="comment">[i]</span> ? min : arr<span class="comment">[i]</span>;
+        max = max &gt;= arr<span class="comment">[i]</span> ? max : arr<span class="comment">[i]</span>;
+        countArr<span class="comment">[arr<span class="comment">[i]</span>]</span> = countArr<span class="comment">[arr<span class="comment">[i]</span>]</span> ? countArr<span class="comment">[arr<span class="comment">[i]</span>]</span>++ : 1;
+    }
+
+    for (let i = min; i &lt; max; i++) {
+        countArr<span class="comment">[i + 1]</span> = (countArr<span class="comment">[i + 1]</span>||0) + (countArr<span class="comment">[i]</span>|| 0);
+    }
+
+    for (let i = len - 1; i &gt;= 0; i--) {
+        resArr<span class="comment">[countArr<span class="comment">[arr<span class="comment">[i]</span>]</span> - 1]</span> = arr<span class="comment">[i]</span>;
+        countArr<span class="comment">[arr<span class="comment">[i]</span>]</span>--;
+    }
+
+    return resArr;
 }
-
-for (let i = min; i &lt; max; i++) {
-    countArr<span class="comment">[i + 1]</span> = (countArr<span class="comment">[i + 1]</span>||0) + (countArr<span class="comment">[i]</span>|| 0);
-}
-
-for (let i = len - 1; i &gt;= 0; i--) {
-    resArr<span class="comment">[countArr<span class="comment">[arr<span class="comment">[i]</span>]</span> - 1]</span> = arr<span class="comment">[i]</span>;
-    countArr<span class="comment">[arr<span class="comment">[i]</span>]</span>--;
-}
-
-return resArr;
-</code></pre><p>}</p>
-
+</code></pre>
             
           </span>
         
@@ -2143,119 +2338,6 @@ Obj.say(); <span class="comment">// time</span>
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/12/17/tree/" itemprop="url">
-                  无限树节点
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-12-17T00:00:00+08:00" content="2016-12-17">
-              2016-12-17
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/12/17/tree/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/17/tree/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>之前有在已知树节点的情况下做过两级树菜单，如果是未知树节点的情况下，有可能是无限节点的延伸，这时可以用ng的inclue功能来实现，html结构大概如下：</p>
-<h4 id="HTML:">HTML:</h4><pre><code><span class="tag">&lt;<span class="title">ul</span> <span class="attribute">class</span>=<span class="value">"list-unstyled"</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"organ in $ctrl.organsList"</span> <span class="attribute">ng-click</span>=<span class="value">"$ctrl.selectOrgan(organ,'parent',$event)"</span>&gt;</span>
-        <span class="comment"></span>
-        <span class="tag">&lt;<span class="title">ul</span> <span class="attribute">ng-include</span>=<span class="value">"'organ-children.html'"</span>&gt;</span><span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
-<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/ng-template"</span> <span class="attribute">id</span>=<span class="value">"organ-children.html"</span>&gt;</span><span class="handlebars"><span class="xml">
-    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"organ in organ.children"</span> <span class="attribute">ng-click</span>=<span class="value">"$ctrl.selectOrgan(organ,'child',$event)"</span>&gt;</span>
-        <span class="comment"></span>
-        <span class="tag">&lt;<span class="title">ul</span> <span class="attribute">ng-if</span>=<span class="value">"organ.hadChildren=='C02'"</span> <span class="attribute">ng-include</span>=<span class="value">"'organ-children.html'"</span>&gt;</span><span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
-</span></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
-</code></pre><p>在子页面children.html的列表li也包着子页面本身，于是就像迭代自己一样可以形成未知的多级菜单。<br>如果一开始不是一次性获得整棵树，点击父节点才能获取子节点的话，还得注意使用阻止冒泡的方法来阻止父节点的事件。<br>ng的$event事件里就带有阻止冒泡方法stopPropagation()，点击节点的方法如下：</p>
-<h4 id="JS:">JS:</h4><pre><code><span class="variable">$ctrl</span>.selectOrgan = <span class="keyword">function</span>(<span class="literal">item</span>,name,<span class="variable">$e</span>) {
-    <span class="variable">$ctrl</span>.selected = item;
-    if (!!name) {
-        if (name == <span class="string">'child'</span>) {
-            // 阻止冒泡
-            <span class="variable">$e</span>.stopPropagation();
-        }
-        if (item.hadChildren == <span class="string">'C02'</span> &amp;&amp; !item.hasOwnProperty(<span class="string">'children'</span>)) {
-            <span class="variable">$ctrl</span>.getData(item);
-        }
-    }
-};
-</code></pre>
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -2302,7 +2384,7 @@ Obj.say(); <span class="comment">// time</span>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -2316,7 +2398,7 @@ Obj.say(); <span class="comment">// time</span>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

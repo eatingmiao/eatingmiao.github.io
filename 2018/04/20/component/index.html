@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="JavaScript OOP," />
+  <meta name="keywords" content="Angular,JavaScript,React,Vue," />
 
 
 
@@ -51,40 +51,19 @@
 
 
 
-<meta name="description" content="上一篇笔记提到了赋值和复制的微妙区别，现在来整理一下理论。
-JavaScript虽然没有类，但仍存在两种类型：
-
-原始类型 - 简单数据值
-引用类型 - 对象，本质为指向内存位置的引用
-
-其他编程语言用栈储存原始类型，用堆储存引用类型，js则用一个变量对象追踪变流量的生存期，原始值被保存在变量对象内，而引用值则作为一个指针保存在变量对象内，该指针指向实际对象在内存中的存储位置。
-原始类型
-bool">
+<meta name="description" content="观望这几年的前端框架，React、Vue、Angular2+ 在应用打包，状态管理，响应性和CLIs等方面正在互相学习和渗透，最终选用的解决方案也大同小异。
+React 为现代前端开发普及了 Comonent 的概念，Vue 一开始就将组件作为其核心特性之一。在 Angular v1.x 时期，社区就有人开始编写基于组件的指令，后来 Angular v1.6 引入了 angular.compone">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JavaScript类型">
-<meta property="og:url" content="http://eatingmiao.github.io/2016/11/01/type/index.html">
+<meta property="og:title" content="Web Component">
+<meta property="og:url" content="http://eatingmiao.github.io/2018/04/20/component/index.html">
 <meta property="og:site_name" content="Eating's Notes">
-<meta property="og:description" content="上一篇笔记提到了赋值和复制的微妙区别，现在来整理一下理论。
-JavaScript虽然没有类，但仍存在两种类型：
-
-原始类型 - 简单数据值
-引用类型 - 对象，本质为指向内存位置的引用
-
-其他编程语言用栈储存原始类型，用堆储存引用类型，js则用一个变量对象追踪变流量的生存期，原始值被保存在变量对象内，而引用值则作为一个指针保存在变量对象内，该指针指向实际对象在内存中的存储位置。
-原始类型
-bool">
-<meta property="og:updated_time" content="2016-11-02T13:39:50.000Z">
+<meta property="og:description" content="观望这几年的前端框架，React、Vue、Angular2+ 在应用打包，状态管理，响应性和CLIs等方面正在互相学习和渗透，最终选用的解决方案也大同小异。
+React 为现代前端开发普及了 Comonent 的概念，Vue 一开始就将组件作为其核心特性之一。在 Angular v1.x 时期，社区就有人开始编写基于组件的指令，后来 Angular v1.6 引入了 angular.compone">
+<meta property="og:updated_time" content="2018-04-20T13:04:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JavaScript类型">
-<meta name="twitter:description" content="上一篇笔记提到了赋值和复制的微妙区别，现在来整理一下理论。
-JavaScript虽然没有类，但仍存在两种类型：
-
-原始类型 - 简单数据值
-引用类型 - 对象，本质为指向内存位置的引用
-
-其他编程语言用栈储存原始类型，用堆储存引用类型，js则用一个变量对象追踪变流量的生存期，原始值被保存在变量对象内，而引用值则作为一个指针保存在变量对象内，该指针指向实际对象在内存中的存储位置。
-原始类型
-bool">
+<meta name="twitter:title" content="Web Component">
+<meta name="twitter:description" content="观望这几年的前端框架，React、Vue、Angular2+ 在应用打包，状态管理，响应性和CLIs等方面正在互相学习和渗透，最终选用的解决方案也大同小异。
+React 为现代前端开发普及了 Comonent 的概念，Vue 一开始就将组件作为其核心特性之一。在 Angular v1.x 时期，社区就有人开始编写基于组件的指令，后来 Angular v1.6 引入了 angular.compone">
 
 
 
@@ -96,7 +75,7 @@ bool">
   };
 </script>
 
-  <title> JavaScript类型 | Eating's Notes </title>
+  <title> Web Component | Eating's Notes </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -216,7 +195,7 @@ bool">
             
             
               
-                JavaScript类型
+                Web Component
               
             
           </h1>
@@ -225,8 +204,8 @@ bool">
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-11-01T00:00:00+08:00" content="2016-11-01">
-              2016-11-01
+            <time itemprop="dateCreated" datetime="2018-04-20T00:00:00+08:00" content="2018-04-20">
+              2018-04-20
             </time>
           </span>
 
@@ -236,8 +215,8 @@ bool">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/11/01/type/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/01/type/" itemprop="commentsCount"></span>
+                <a href="/2018/04/20/component/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/04/20/component/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -256,24 +235,110 @@ bool">
       
 
       
-        <span itemprop="articleBody"><p>上一篇笔记提到了赋值和复制的微妙区别，现在来整理一下理论。</p>
-<p>JavaScript虽然没有类，但仍存在两种类型：</p>
+        <span itemprop="articleBody"><p>观望这几年的前端框架，React、Vue、Angular2+ 在应用打包，状态管理，响应性和CLIs等方面正在互相学习和渗透，最终选用的解决方案也大同小异。</p>
+<p>React 为现代前端开发普及了 Comonent 的概念，Vue 一开始就将组件作为其核心特性之一。在 Angular v1.x 时期，社区就有人开始编写<a href="http://www.airpair.com/angularjs/posts/component-based-angularjs-directives#1-component-based-directives-in-angularjs" target="_blank" rel="external">基于组件的指令</a>，后来 Angular v1.6 引入了 angular.component() 以便于编写基于组件的指令。2016年发布的 Angular 2.0 才为开发者带来真正的组件。</p>
+<p>4月18日在美国盐湖城举办的 ng-conf 会议，Angular 核心开发人员之一 Rob Wormald 也表示，在 Angular v6 及以后的迭代中也依然沿用 Web Component 作为核心元素。</p>
+<h2 id="定义">定义</h2><blockquote>
+<p>Web components are a set of web platform APIs that allow you to create new custom, reusable, encapsulated HTML tags to use in web pages and web apps. Custom components and widgets build on the Web Component standards, will work across modern browsers, and can be used with any JavaScript library or framework that works with HTML.</p>
+</blockquote>
+<p>Web 组件是一套基于 Web 平台的标准化API，允许开发者在 Web 页面和 Web 应用程序中创建新的自定义、可重用、封装的 HTML 标记。在Web组件标准上构建的自定义组件和小部件将在现代浏览器中运行，并且可以与任何需要使用 HTML 的 Js 库或框架一起使用。</p>
+<p>Web Component 由四种主要技术组成：</p>
 <ul>
-<li>原始类型 - 简单数据值</li>
-<li>引用类型 - 对象，本质为指向内存位置的引用</li>
+<li>Custom Elements</li>
+<li>Shadow DOM</li>
+<li>HTML Templates</li>
+<li>HTML Imports</li>
 </ul>
-<p>其他编程语言用栈储存原始类型，用堆储存引用类型，js则用一个变量对象追踪变流量的生存期，原始值被保存在变量对象内，而引用值则作为一个指针保存在变量对象内，该指针指向实际对象在内存中的存储位置。</p>
-<h4 id="原始类型">原始类型</h4><ul>
-<li>boolean</li>
-<li>number</li>
-<li>string</li>
-<li>null</li>
-<li>undefined</li>
+<p>通过 Custom Elements 自定义标签元素来引入 HTML Templates 是可重用组件化的基础。Shadow DOM 可以隔离组件间的冲突和影响，HTML Imports 提供了一种将一个.html文档中定义的所有资源导入另一个文档的范围的方法，该方法不能有效控制管理资源的依赖性而被 Mozilla 反对。</p>
+<h3 id="Custom_Elements">Custom Elements</h3><p>该项标准还处于non-normative的状态，请查看最新的<a href="https://www.w3.org/TR/custom-elements/" target="_blank" rel="external">规范</a>。</p>
+<p>Custom Elements 提供了一些回调函数控制自定义元素的生命周期：</p>
+<ul>
+<li>connectedCallback：在自定义元素首次连接到文档的DOM时调用。</li>
+<li>disconnectedCallback：在自定义元素与文档的DOM断开连接时调用。</li>
+<li>adoptedCallback：在自定义元素移动到新文档时调用。</li>
+<li>attributeChangedCallback：在添加，删除或更改其中一个自定义元素的属性时调用。</li>
 </ul>
-<p>原始类型的变量值直接保存原始值，当原始值赋给一个变量时，每个变量有自己的一份数据拷贝。</p>
-<h4 id="引用类型">引用类型</h4><p>引用值是引用类型的实例，就是对象，对象是属性的无序列表，js里的函数其实也是引用值。<br>引用类型不在变量中直接保存对象，所以引用值变量实际上并不包含对象的实例，而是一个指向了内存中实际对象所在位置的指针。</p>
-<p>js有垃圾回收机制，使用引用类型时虽然不必担心内存非配，但最好在对象使用完毕后解除引用，让垃圾收集器对其内存进行释放，最佳解除手段是将对象置为null。</p>
-</span>
+<p>封装一个 hello-world 组件，该组件绑定一个允许更改的 name 属性，并对其值进行监听：</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">HTMLElement</span> {</span>
+    static observedAttributes = [<span class="symbol">'nam</span>e']
+    attributeChangedCallback(key, oldValue, newValue){}
+    connectedCallback(){}
+    disconnectedCallback(){}
+    set name(value){}
+    get name(){}
+    onClick(){
+        <span class="keyword">this</span>.dispatchEvent(<span class="keyword">new</span> <span class="type">CustomEvent</span>(<span class="symbol">'nameChang</span>e'),{...}));
+    }
+
+}
+customElements.define(<span class="symbol">'hello</span>-world', <span class="type">HelloWorld</span>);
+</code></pre><h3 id="Shadow_DOM">Shadow DOM</h3><p>Shadow DOM 为 Web 组件中的 DOM 和 CSS 提供了封装。因为组件的样式与主文档的样式也可能会互相影响，而实际在使用组件的时候并不需要关心组件的内部结构，只需关心组件本身，所以 Shadow DOM 把组件元素与文档隔离和封装，能更好地组织页面元素。</p>
+<p>Shadow DOM 必须附加在一个元素上，可以是HTML文件中的一个元素，也可以是脚本中创建的元素；可以是原生的元素，如\<div\>、\<p\>；也可以是自定义元素如 \<my-element\>。</my-element\></p\></div\></p>
+<pre><code>// 创建 shadow DOM
+var shadow = document.querySelector('#hostElement').attachShadow({mode: 'open'});
+// 给 shadow DOM 添加文字
+shadow.innerHTML = '<span class="tag">&lt;<span class="title">p</span>&gt;</span>Here is some new text<span class="tag">&lt;/<span class="title">p</span>&gt;</span>';
+// 添加CSS，将文字变红
+shadow.innerHTML += '<span class="tag">&lt;<span class="title">style</span>&gt;</span><span class="css"><span class="tag">p</span> <span class="rules">{ <span class="rule"><span class="attribute">color</span>:<span class="value"> red</span></span>; }</span></span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>';
+</code></pre><h2 id="实现">实现</h2><p>React、Vue、Angular2+ 三个框架都可以在组件中指定事件处理器并对 DOM 事件进行监听和触发。以下用三种方式封装一个记录点击次数的按钮。</p>
+<p>在 Angular 中自定义事件可以通过调用 EventEmitter 的 emit 方法来触发：</p>
+<pre><code>@Component({
+  selector: 'counter',
+  template: `
+   <span class="tag">&lt;<span class="title">button</span> (<span class="attribute">click</span>)=<span class="value">"increment()"</span>&gt;</span>
+        <span class="comment"></span>
+   <span class="tag">&lt;/<span class="title">button</span>&gt;</span>`,
+})
+class CounterComponent {  
+  private count: number = 0;
+  @Output() increment = new EventEmitter<span class="tag">&lt;<span class="title">number</span>&gt;</span>();
+
+    increment() {
+      this.count += 1;
+      this.increment.emit('increment');
+    }
+}
+</code></pre><p>在 Vue 中可以通过注射 $emit 来触发自定义事件：</p>
+<pre><code>Vue.component('counter', {  
+  template: `
+   <span class="tag">&lt;<span class="title">button</span> @<span class="attribute">click</span>=<span class="value">"increment"</span>&gt;</span>
+        <span class="comment"></span>
+   <span class="tag">&lt;/<span class="title">button</span>&gt;</span>`,
+  data: function () {
+    return { count: 0 };
+  },
+  methods: {
+    increment() {
+      this.count += 1;
+      this.$emit('increment');
+    },
+  },
+})
+</code></pre><p>React 实现自定义事件的方式有点不同，Angular 和 Vue 作为子组件的事件会向父组件传递，而 React 是让子组件继承父组件的 props，props 就相当于 Angular 的 inputs，依据父组件传递给 Counter 的数据流，当 state 改变时，Counter 触发 increment 事件进行重新渲染。</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">React</span>.<span class="title">Component</span> {</span> 
+  constructor(props) {
+    <span class="keyword">super</span>(props);
+    <span class="keyword">this</span>.state = { count: <span class="number">0</span> };
+  }
+
+  increment() {
+    <span class="keyword">this</span>.setState(
+      prevState =&gt; ({ count: prevState.count + <span class="number">1</span> }),
+      () =&gt; {
+        <span class="keyword">this</span>.props.handleIncrement(<span class="keyword">this</span>.state.count);
+      },
+    );
+  }
+
+  render() {
+    <span class="keyword">return</span> (
+      &lt;button onClick={() =&gt; <span class="keyword">this</span>.increment()}&gt;
+        { <span class="keyword">this</span>.state.count }
+      &lt;/button&gt;
+      );
+  }
+}
+</code></pre></span>
       
     </div>
 
@@ -281,7 +346,13 @@ bool">
       
         <div class="post-tags">
           
-            <a href="/tags/JavaScript-OOP/" rel="tag">#JavaScript OOP</a>
+            <a href="/tags/Angular/" rel="tag">#Angular</a>
+          
+            <a href="/tags/JavaScript/" rel="tag">#JavaScript</a>
+          
+            <a href="/tags/React/" rel="tag">#React</a>
+          
+            <a href="/tags/Vue/" rel="tag">#Vue</a>
           
         </div>
       
@@ -290,17 +361,13 @@ bool">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/10/=&copy/" rel="next" title="“=”赋值和angular.copy()赋值的区别">
-                <i class="fa fa-chevron-left"></i> “=”赋值和angular.copy()赋值的区别
+              <a href="/2018/04/13/o/" rel="next" title="算法复杂度">
+                <i class="fa fa-chevron-left"></i> 算法复杂度
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/12/17/tree/" rel="prev" title="无限树节点">
-                无限树节点 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -327,8 +394,8 @@ bool">
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/11/01/type/"
-           data-title="JavaScript类型" data-url="http://eatingmiao.github.io/2016/11/01/type/">
+      <div class="ds-thread" data-thread-key="2018/04/20/component/"
+           data-title="Web Component" data-url="http://eatingmiao.github.io/2018/04/20/component/">
       </div>
     
   </div>
@@ -418,7 +485,7 @@ bool">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#原始类型"><span class="nav-number">1.</span> <span class="nav-text">原始类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#引用类型"><span class="nav-number">2.</span> <span class="nav-text">引用类型</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Custom_Elements"><span class="nav-number">1.1.</span> <span class="nav-text">Custom Elements</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shadow_DOM"><span class="nav-number">1.2.</span> <span class="nav-text">Shadow DOM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
